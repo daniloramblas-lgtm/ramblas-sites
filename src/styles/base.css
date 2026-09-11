@@ -1105,6 +1105,10 @@ section {
   transform: translateY(-2px);
   background: #19653f;
 }
+/* Mantém o contato livre quando a hospedagem exibe seu selo flutuante. */
+body:has(#nl-badge-frame) .whats-flutuante {
+  bottom: clamp(4.75rem, 7vw, 5.25rem);
+}
 .whats-flutuante svg {
   width: 20px;
   height: 20px;

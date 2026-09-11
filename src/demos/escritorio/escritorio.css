@@ -1,0 +1,541 @@
+/* Áurea Consultoria — marfim, verde profundo, azul escuro e dourado discreto */
+.demo-escritorio {
+  --marfim: #f6f2e8;
+  --marfim-2: #ece5d6;
+  --papel: #fffdf7;
+  --verde: #10352c;
+  --verde-claro: #1d5244;
+  --azul: #1b2b44;
+  --dourado: #b08d47;
+  --texto: #23271f;
+  --texto-2: #575e52;
+  --linha: rgba(35, 39, 31, 0.14);
+
+  background: var(--marfim);
+  color: var(--texto);
+  min-height: 100vh;
+}
+.demo-escritorio h1,
+.demo-escritorio h2,
+.demo-escritorio h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--verde);
+  line-height: 1.12;
+}
+
+.au-cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(246, 242, 232, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--linha);
+}
+.au-cabecalho__interno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+  gap: 1rem;
+}
+.au-logo {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.35rem;
+  color: var(--verde);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.au-logo i {
+  width: 10px;
+  height: 22px;
+  background: var(--dourado);
+  display: inline-block;
+}
+.au-nav {
+  display: none;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+.au-nav a {
+  color: var(--texto-2);
+  text-decoration: none;
+}
+.au-nav a:hover {
+  color: var(--verde);
+}
+@media (min-width: 900px) {
+  .au-nav {
+    display: flex;
+  }
+}
+.au-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.96rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.au-btn--verde {
+  background: var(--verde);
+  color: #f6f2e8;
+}
+.au-btn--verde:hover {
+  background: #0a241d;
+}
+.au-btn--contorno {
+  border-color: var(--verde);
+  color: var(--verde);
+}
+.au-btn--contorno:hover {
+  background: rgba(16, 53, 44, 0.07);
+}
+.au-btn--claro {
+  background: var(--dourado);
+  color: #1a1508;
+}
+.au-btn--pequeno {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.88rem;
+}
+
+.au-hero {
+  padding-block: 0;
+  position: relative;
+  overflow: hidden;
+  color: #f4efe3;
+}
+.au-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.au-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(95deg, rgba(16, 53, 44, 0.96) 30%, rgba(27, 43, 68, 0.78));
+}
+.au-hero__conteudo {
+  position: relative;
+  z-index: 2;
+  padding-block: clamp(4rem, 9vw, 6.5rem);
+  max-width: 44rem;
+}
+.au-hero h1 {
+  color: #fbf8f0;
+  font-size: clamp(2.3rem, 5.5vw, 3.7rem);
+  margin-bottom: 1.1rem;
+}
+.au-hero p {
+  color: rgba(251, 248, 240, 0.85);
+  font-size: 1.08rem;
+  max-width: 52ch;
+}
+.au-hero__acoes {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.au-filete {
+  width: 54px;
+  height: 2px;
+  background: var(--dourado);
+  margin-bottom: 1.6rem;
+}
+
+.au-secao {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+}
+.au-secao--claro {
+  background: var(--marfim-2);
+}
+.au-secao--verde {
+  background: var(--verde);
+  color: rgba(246, 242, 232, 0.85);
+}
+.au-secao--verde h2,
+.au-secao--verde h3 {
+  color: #fbf8f0;
+}
+.au-titulo {
+  max-width: 46ch;
+  margin-bottom: 2.2rem;
+}
+.au-titulo h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0 0 0.7rem;
+}
+.au-titulo p {
+  margin: 0;
+  color: var(--texto-2);
+}
+.au-secao--verde .au-titulo p {
+  color: rgba(246, 242, 232, 0.75);
+}
+
+.au-sobre {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 900px) {
+  .au-sobre {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+.au-sobre img {
+  width: 100%;
+  border-radius: 3px;
+}
+.au-numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--linha);
+  padding-top: 1.5rem;
+}
+.au-numeros p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--texto-2);
+}
+.au-numeros strong {
+  display: block;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--verde);
+}
+
+.au-areas {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.au-area {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-top: 3px solid var(--dourado);
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.au-area h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+.au-area p {
+  margin: 0;
+  color: var(--texto-2);
+  font-size: 0.95rem;
+}
+.au-area a {
+  margin-top: auto;
+  color: var(--verde);
+  font-weight: 600;
+  font-size: 0.93rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--dourado);
+  align-self: flex-start;
+  padding-bottom: 2px;
+}
+
+.au-equipe {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.au-pessoa img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 0.9rem;
+}
+.au-pessoa h3 {
+  margin: 0 0 0.15rem;
+  font-size: 1.15rem;
+}
+.au-pessoa span {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--dourado);
+}
+.au-pessoa small {
+  color: var(--texto-2);
+  font-size: 0.86rem;
+}
+
+.au-colunas {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+.au-colunas > * {
+  min-width: 0;
+}
+@media (min-width: 960px) {
+  .au-colunas {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.au-formulario {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  padding: clamp(1.4rem, 3vw, 2rem);
+  min-width: 0;
+}
+.au-secao--verde .au-formulario {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(246, 242, 232, 0.2);
+}
+.au-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+.au-campo label {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.au-campo input,
+.au-campo select,
+.au-campo textarea {
+  font: inherit;
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--linha);
+  border-radius: 2px;
+  background: var(--papel);
+  color: var(--texto);
+}
+.au-secao--verde .au-campo input,
+.au-secao--verde .au-campo select,
+.au-secao--verde .au-campo textarea {
+  background: rgba(255, 255, 255, 0.92);
+}
+.au-campo textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+.au-campo [aria-invalid='true'] {
+  border-color: #a04a2f;
+}
+.au-erro {
+  color: #b4512f;
+  font-size: 0.85rem;
+}
+.au-ok {
+  border: 1px solid rgba(16, 53, 44, 0.3);
+  background: rgba(16, 53, 44, 0.08);
+  padding: 0.9rem 1rem;
+  font-size: 0.92rem;
+  margin-top: 1rem;
+}
+.au-secao--verde .au-ok {
+  background: rgba(176, 141, 71, 0.18);
+  border-color: rgba(176, 141, 71, 0.5);
+  color: #f6f2e8;
+}
+.au-arquivos {
+  border: 1px dashed var(--linha);
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--texto-2);
+}
+.au-arquivos ul {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  text-align: left;
+  font-size: 0.88rem;
+}
+.au-arquivos li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--linha);
+  padding-bottom: 0.35rem;
+}
+
+.au-artigos {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.au-artigo {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  display: flex;
+  flex-direction: column;
+}
+.au-artigo img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+.au-artigo__corpo {
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+.au-artigo h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.au-artigo p {
+  margin: 0;
+  color: var(--texto-2);
+  font-size: 0.93rem;
+}
+.au-artigo small {
+  color: var(--dourado);
+  font-size: 0.83rem;
+}
+.au-artigo a {
+  margin-top: auto;
+  color: var(--verde);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--dourado);
+  align-self: flex-start;
+}
+
+.au-faq details {
+  border-bottom: 1px solid var(--linha);
+}
+.au-faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.1rem 2rem 1.1rem 0;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--verde);
+  position: relative;
+}
+.au-faq summary::-webkit-details-marker {
+  display: none;
+}
+.au-faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 0.4rem;
+  color: var(--dourado);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.au-faq details[open] summary::after {
+  content: '–';
+}
+.au-faq p {
+  margin: 0 0 1.2rem;
+  color: var(--texto-2);
+  max-width: 70ch;
+}
+
+.au-aviso {
+  font-size: 0.88rem;
+  color: var(--texto-2);
+  border-left: 2px solid var(--dourado);
+  padding-left: 1rem;
+  max-width: 70ch;
+}
+.au-secao--verde .au-aviso {
+  color: rgba(246, 242, 232, 0.75);
+}
+.au-rodape {
+  background: var(--azul);
+  color: rgba(246, 242, 232, 0.8);
+  padding-block: 3rem 2rem;
+  font-size: 0.92rem;
+}
+.au-rodape a {
+  color: rgba(246, 242, 232, 0.9);
+}
+.au-rodape__grade {
+  display: grid;
+  gap: 2rem;
+}
+@media (min-width: 780px) {
+  .au-rodape__grade {
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+}
+.au-rodape h4 {
+  color: #fbf8f0;
+  font-size: 0.9rem;
+  margin: 0 0 0.8rem;
+}
+.au-rodape ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+/* páginas internas */
+.au-interna {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+.au-migalhas {
+  font-size: 0.87rem;
+  color: var(--texto-2);
+  margin-bottom: 1.5rem;
+}
+.au-migalhas a {
+  color: var(--verde);
+}
+.au-conteudo {
+  max-width: 68ch;
+}
+.au-conteudo p {
+  color: var(--texto-2);
+  line-height: 1.75;
+}
+.au-conteudo ul {
+  color: var(--texto-2);
+  display: grid;
+  gap: 0.4rem;
+  padding-left: 1.1rem;
+}
+.au-lateral {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  padding: 1.5rem;
+}
+.au-interna__grade {
+  display: grid;
+  gap: 2.5rem;
+}
+@media (min-width: 960px) {
+  .au-interna__grade {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}

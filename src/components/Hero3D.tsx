@@ -52,7 +52,7 @@ export default function Hero3D() {
 
         <div className="tablet" data-entrada="1">
           <img
-            {...conjunto('/img/capa-aurea.webp', '34vw')}
+            {...conjunto('/img/capa-aurea-v2.webp', '34vw')}
             alt="Modelo de site institucional para escritórios apresentado em um tablet"
             width={1200}
             height={800}
@@ -64,7 +64,7 @@ export default function Hero3D() {
         <div className="notebook" data-entrada="2">
           <div className="notebook__tela reflexo">
             <img
-              {...conjunto('/img/capa-forno27.webp', '(max-width: 900px) 78vw, 500px')}
+              {...conjunto('/img/capa-forno27-v2.webp', '(max-width: 900px) 78vw, 500px')}
               alt="Modelo de cardápio digital de pizzaria apresentado em um notebook"
               width={1200}
               height={800}
@@ -77,7 +77,7 @@ export default function Hero3D() {
 
         <div className="celular" data-entrada="3">
           <img
-            {...conjunto('/img/capa-distrito13.webp', '27vw')}
+            {...conjunto('/img/capa-distrito13-v2.webp', '27vw')}
             alt="Modelo de agendamento de barbearia apresentado em um celular"
             width={600}
             height={1100}

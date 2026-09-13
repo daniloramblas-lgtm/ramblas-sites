@@ -338,6 +338,12 @@ describe('seletor de demonstrações', () => {
 })
 
 describe('cards da galeria', () => {
+  it('cada filtro publicado encontra pelo menos um modelo', () => {
+    for (const categoria of ['alimentacao', 'beleza', 'escritorios', 'automoveis'] as const) {
+      expect(modelos.some((modelo) => modelo.categoria === categoria)).toBe(true)
+    }
+  })
+
   it('todo modelo tem resumo curto e estudo de caso', () => {
     for (const m of modelos) {
       expect(m.resumoCurto.length).toBeGreaterThan(20)

@@ -17,7 +17,7 @@ export const demos: DemoInfo[] = [
     curto: 'Pizzaria',
     segmento: 'Alimentação',
     rota: '/demonstracao/forno-27',
-    miniatura: '/img/capa-forno27.webp',
+    miniatura: '/img/capa-forno27-v2.webp',
     cor: '#8e2c22',
   },
   {
@@ -26,7 +26,7 @@ export const demos: DemoInfo[] = [
     curto: 'Barbearia',
     segmento: 'Beleza',
     rota: '/demonstracao/distrito-13',
-    miniatura: '/img/capa-distrito13.webp',
+    miniatura: '/img/capa-distrito13-v2.webp',
     cor: '#b0713c',
   },
   {
@@ -35,7 +35,7 @@ export const demos: DemoInfo[] = [
     curto: 'Escritório',
     segmento: 'Serviços profissionais',
     rota: '/demonstracao/aurea',
-    miniatura: '/img/capa-aurea.webp',
+    miniatura: '/img/capa-aurea-v2.webp',
     cor: '#10352c',
   },
   {
@@ -44,7 +44,7 @@ export const demos: DemoInfo[] = [
     curto: 'Concessionária',
     segmento: 'Automóveis',
     rota: '/demonstracao/linha-norte',
-    miniatura: '/img/capa-linhanorte.webp',
+    miniatura: '/img/capa-linhanorte-v2.webp',
     cor: '#1b3b6f',
   },
 ]

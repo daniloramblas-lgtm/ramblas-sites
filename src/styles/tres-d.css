@@ -462,9 +462,21 @@ body {
   .tablet {
     display: none;
   }
+  .cena3d {
+    aspect-ratio: 1 / 0.76;
+  }
+  .notebook {
+    left: 1%;
+    top: 7%;
+    width: 84%;
+  }
+  .celular {
+    right: 1%;
+    bottom: 1%;
+    width: 24%;
+  }
   .cartao-flutuante {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.65rem;
+    display: none;
   }
 }
 

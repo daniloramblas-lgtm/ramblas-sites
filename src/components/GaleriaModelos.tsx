@@ -27,6 +27,7 @@ export default function GaleriaModelos({ limite }: { limite?: number }) {
             type="button"
             className="filtro"
             aria-pressed={filtro === c.id}
+            aria-controls="lista-modelos"
             onClick={() => setFiltro(c.id)}
           >
             {c.rotulo}
@@ -45,9 +46,14 @@ export default function GaleriaModelos({ limite }: { limite?: number }) {
           }
         />
       ) : (
-        <div className="grade-modelos com-perspectiva">
+        <div
+          className="grade-modelos com-perspectiva"
+          id="lista-modelos"
+          aria-live="polite"
+          aria-label={`${lista.length} ${lista.length === 1 ? 'modelo encontrado' : 'modelos encontrados'}`}
+        >
           {lista.map((m, i) => (
-            <article className="card-modelo tem-relevo" key={m.slug} data-reveal>
+            <article className="card-modelo tem-relevo" key={m.slug}>
               <figure className="card-modelo__figura">
                 <div className="mockup">
                   <img

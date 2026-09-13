@@ -42,8 +42,8 @@ export const modelos: Modelo[] = [
     categoria: 'alimentacao',
     resumo:
       'Cardápio digital com busca, escolha de tamanho, adicionais e carrinho que fecha o pedido direto na conversa do WhatsApp.',
-    capa: '/img/capa-forno27.webp',
-    alt: 'Composição gráfica em vermelho escuro e dourado representando uma pizzaria artesanal',
+    capa: '/img/capa-forno27-v2.webp',
+    alt: 'Pizzaria artesanal com cardápio digital, carrinho e pedido pelo WhatsApp em painéis tridimensionais',
     funcionalidades: ['Cardápio por categoria', 'Busca de produtos', 'Carrinho e entrega', 'Pedido por WhatsApp'],
     rotaDemo: '/demonstracao/forno-27',
     indicadoPara: [
@@ -87,8 +87,8 @@ export const modelos: Modelo[] = [
     categoria: 'beleza',
     resumo:
       'Agenda com escolha de profissional, data e horário, tabela de serviços, galeria de trabalhos e clube de assinatura.',
-    capa: '/img/capa-distrito13.webp',
-    alt: 'Composição gráfica em preto e cobre representando uma barbearia contemporânea',
+    capa: '/img/capa-distrito13-v2.webp',
+    alt: 'Barbearia contemporânea com agenda, profissionais e horários em painéis tridimensionais',
     funcionalidades: ['Agendamento guiado em 4 etapas', 'Escolha de profissional', 'Clube de assinatura', 'Confirmação por WhatsApp'],
     rotaDemo: '/demonstracao/distrito-13',
     indicadoPara: [
@@ -132,8 +132,8 @@ export const modelos: Modelo[] = [
     categoria: 'escritorios',
     resumo:
       'Base institucional para advocacia, contabilidade, seguros, arquitetura ou consultoria, com áreas de atuação, equipe e atendimento inicial.',
-    capa: '/img/capa-aurea.webp',
-    alt: 'Composição gráfica em verde profundo e dourado discreto representando um escritório de consultoria',
+    capa: '/img/capa-aurea-v2.webp',
+    alt: 'Escritório de consultoria com áreas de atuação, atendimento e agenda em painéis tridimensionais',
     funcionalidades: ['Áreas de atuação', 'Atendimento inicial', 'Agendamento de reunião', 'Conteúdos e FAQ'],
     rotaDemo: '/demonstracao/aurea',
     indicadoPara: [
@@ -177,8 +177,8 @@ export const modelos: Modelo[] = [
     categoria: 'automoveis',
     resumo:
       'Catálogo de veículos com filtros, comparação, simulação ilustrativa de financiamento, avaliação de usado e test-drive.',
-    capa: '/img/capa-linhanorte.webp',
-    alt: 'Composição gráfica em grafite e azul profundo representando uma concessionária de veículos',
+    capa: '/img/capa-linhanorte-v2.webp',
+    alt: 'Concessionária com catálogo, comparador e simulação em painéis tridimensionais',
     funcionalidades: ['Catálogo com filtros', 'Comparador de veículos', 'Simulação de financiamento', 'Test-drive e avaliação'],
     rotaDemo: '/demonstracao/linha-norte',
     indicadoPara: [

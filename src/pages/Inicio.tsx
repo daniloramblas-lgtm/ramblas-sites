@@ -1,123 +1,64 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  beneficios,
   contato,
   conversao,
   etapas,
   faq,
   hero,
   planos,
+  planosIntro,
+  quemFaz,
   servicos,
 } from '../config/site.config'
 import GaleriaModelos from '../components/GaleriaModelos'
 import FormularioOrcamento from '../components/FormularioOrcamento'
+import Hero3D from '../components/Hero3D'
+import { BotaoVerMais } from '../components/Comuns'
 import { useReveal } from '../lib/useReveal'
 import { useSeo } from '../lib/seo'
+import { metaHome } from '../data/rotas'
 import { linkWhatsApp } from '../lib/whatsapp'
-
-const dadosEstruturados = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: 'Ramblas Sites',
-  description:
-    'Criação de sites, catálogos, agendamentos e sistemas sob medida para pequenos e médios negócios.',
-  url: contato.site,
-  email: contato.email,
-  areaServed: 'BR',
-  address: { '@type': 'PostalAddress', addressLocality: 'São Paulo', addressRegion: 'SP', addressCountry: 'BR' },
-  makesOffer: servicos.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.nome } })),
-  mainEntity: {
-    '@type': 'FAQPage',
-    mainEntity: faq.map((f) => ({
-      '@type': 'Question',
-      name: f.p,
-      acceptedAnswer: { '@type': 'Answer', text: f.r },
-    })),
-  },
-}
+import { evento } from '../lib/analytics'
 
 export default function Inicio() {
-  useReveal()
-  useSeo({
-    titulo: 'Ramblas Sites — sites e sistemas sob medida para pequenos e médios negócios',
-    descricao:
-      'Criamos sites profissionais, catálogos, agendamentos e sistemas sob medida para transformar visitas em atendimentos e vendas.',
-    caminho: '/',
-    dados: dadosEstruturados,
-  })
+  const [todosServicos, setTodosServicos] = useState(false)
+  useReveal(todosServicos)
+  useSeo(metaHome)
+
+  const principais = servicos.filter((s) => s.destaque)
+  const extras = servicos.filter((s) => !s.destaque)
 
   return (
     <>
       {/* ------------------------------------------------------------ hero */}
-      <section className="hero">
+      <section className="hero secao-relevo">
         <div className="container hero__grade">
           <div>
             <h1>{hero.titulo}</h1>
             <p className="hero__texto">{hero.texto}</p>
+            <ul className="hero__pontos">
+              {hero.pontos.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
             <div className="hero__acoes">
               <Link className="btn btn--primario" to="/modelos">
                 {hero.botaoPrimario}
               </Link>
-              <a className="btn btn--contorno" href={linkWhatsApp()} target="_blank" rel="noopener">
+              <a
+                className="btn btn--contorno"
+                href={linkWhatsApp()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => evento('whatsapp_click', { origem: 'hero' })}
+              >
                 {hero.botaoSecundario}
               </a>
             </div>
-            <div className="hero__marcas">
-              <span>Alimentação</span>
-              <span>Beleza</span>
-              <span>Escritórios</span>
-              <span>Automóveis</span>
-            </div>
           </div>
 
-          <div className="composicao" aria-hidden="false">
-            <div className="moldura moldura--desktop">
-              <div className="moldura__barra">
-                <i />
-                <i />
-                <i />
-              </div>
-              <img
-                src="/img/capa-linhanorte.webp"
-                alt="Prévia de um modelo de site para concessionária em tela de computador"
-                width={1200}
-                height={800}
-              />
-            </div>
-            <div className="moldura moldura--celular">
-              <img
-                src="/img/capa-forno27.webp"
-                alt="Prévia de um cardápio digital de pizzaria em tela de celular"
-                width={600}
-                height={1000}
-              />
-            </div>
-            <p className="composicao__etiqueta">
-              <strong>Quatro modelos prontos para explorar</strong>
-              Cada um com funcionalidades reais no navegador.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------ benefícios */}
-      <section className="beneficios">
-        <div className="container">
-          <div className="secao-cabecalho" data-reveal>
-            <h2>O que muda quando o site é feito para o seu negócio</h2>
-            <p>
-              Não é só ter uma página no ar. É ter uma ferramenta que responde quando você está atendendo
-              alguém, fechando o caixa ou dormindo.
-            </p>
-          </div>
-          <div className="grade-beneficios" data-reveal>
-            {beneficios.map((b) => (
-              <article className="beneficio" key={b.titulo}>
-                <h3>{b.titulo}</h3>
-                <p>{b.texto}</p>
-              </article>
-            ))}
-          </div>
+          <Hero3D />
         </div>
       </section>
 
@@ -127,8 +68,8 @@ export default function Inicio() {
           <div className="secao-cabecalho" data-reveal>
             <h2>Modelos demonstrativos por segmento</h2>
             <p>
-              Todas as empresas abaixo são fictícias, criadas para mostrar possibilidades. Você pode navegar
-              por cada demonstração como se fosse um cliente do negócio.
+              Empresas fictícias criadas para mostrar possibilidades. Você navega em cada demonstração como
+              se fosse cliente do negócio.
             </p>
           </div>
           <GaleriaModelos />
@@ -136,23 +77,35 @@ export default function Inicio() {
       </section>
 
       {/* -------------------------------------------------------- serviços */}
-      <section id="servicos">
+      <section id="servicos" className="beneficios secao-relevo secao-relevo--terracota">
         <div className="container">
           <div className="secao-cabecalho" data-reveal>
             <h2>Serviços</h2>
-            <p>
-              Do primeiro domínio ao painel que a sua equipe usa todo dia. Você contrata só o que faz sentido
-              para o momento do negócio.
-            </p>
+            <p>Você contrata só o que faz sentido para o momento do negócio.</p>
           </div>
-        </div>
-        <div className="grade-servicos" data-reveal>
-          {servicos.map((s) => (
-            <article className="servico" key={s.nome}>
-              <h3>{s.nome}</h3>
-              <p>{s.texto}</p>
-            </article>
-          ))}
+          <div className="grade-servicos-compacta" id="lista-servicos" data-reveal>
+            {principais.map((s) => (
+              <article className="servico-card" key={s.nome}>
+                <h3>{s.nome}</h3>
+                <p>{s.texto}</p>
+              </article>
+            ))}
+            {todosServicos &&
+              extras.map((s) => (
+                <article className="servico-card" key={s.nome}>
+                  <h3>{s.nome}</h3>
+                  <p>{s.texto}</p>
+                </article>
+              ))}
+          </div>
+          <p style={{ marginTop: '1.25rem' }}>
+            <BotaoVerMais
+              aberto={todosServicos}
+              onClick={() => setTodosServicos((v) => !v)}
+              rotuloAbrir={`Ver todos os serviços (+${extras.length})`}
+              controla="lista-servicos"
+            />
+          </p>
         </div>
       </section>
 
@@ -161,15 +114,65 @@ export default function Inicio() {
         <div className="container">
           <div className="secao-cabecalho" data-reveal>
             <h2>Como funciona</h2>
-            <p>Quatro etapas, sem surpresa no meio do caminho. Você sabe o que acontece em cada uma delas.</p>
+            <p>Quatro etapas, sem surpresa no meio do caminho.</p>
           </div>
-          <div className="etapas">
+          <ol className="etapas-compactas" data-reveal>
             {etapas.map((e) => (
-              <article className="etapa" key={e.titulo} data-reveal>
+              <li key={e.titulo}>
                 <h3>{e.titulo}</h3>
                 <p>{e.texto}</p>
-              </article>
+              </li>
             ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------- quem faz */}
+      <section id="quem-faz">
+        <div className="container quem-faz painel-elevado" data-reveal>
+          <div className="quem-faz__retrato">
+            {quemFaz.foto ? (
+              <img src={quemFaz.foto} alt={`Foto de ${quemFaz.nome}`} width={700} height={700} loading="lazy" />
+            ) : (
+              <span className="monograma" aria-hidden="true">
+                DR
+              </span>
+            )}
+          </div>
+          <div>
+            <h2>Quem está por trás da Ramblas Sites</h2>
+            <p style={{ fontWeight: 600 }}>
+              {quemFaz.nome} — {quemFaz.papel}
+            </p>
+            {quemFaz.apresentacao.map((p) => (
+              <p key={p.slice(0, 20)} style={{ color: 'var(--grafite-2)' }}>
+                {p}
+              </p>
+            ))}
+            <ul className="quem-faz__pontos">
+              {quemFaz.pontos.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
+            <p style={{ color: 'var(--grafite-2)' }}>{quemFaz.comoConduz}</p>
+            <p className="nota-demo">{quemFaz.aviso}</p>
+            <div className="hero__acoes" style={{ marginTop: '1.25rem' }}>
+              <a
+                className="btn btn--primario btn--pequeno"
+                href={linkWhatsApp('Olá, Danilo! Vim pelo site da Ramblas Sites e quero conversar sobre um projeto.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => evento('whatsapp_click', { origem: 'quem-faz' })}
+              >
+                Conversar pelo WhatsApp
+              </a>
+              <a className="btn btn--contorno btn--pequeno" href={contato.linkedin} target="_blank" rel="noopener noreferrer">
+                LinkedIn
+              </a>
+              <a className="btn btn--contorno btn--pequeno" href={contato.portfolio} target="_blank" rel="noopener noreferrer">
+                Portfólio pessoal
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -179,14 +182,11 @@ export default function Inicio() {
         <div className="container">
           <div className="secao-cabecalho" data-reveal>
             <h2>Planos</h2>
-            <p>
-              Os valores servem como ponto de partida. O orçamento final depende do número de páginas, das
-              funcionalidades e do conteúdo que você já tem pronto.
-            </p>
+            <p>{planosIntro}</p>
           </div>
           <div className="grade-planos">
             {planos.map((p) => (
-              <article className={`plano ${p.destaque ? 'plano--destaque' : ''}`} key={p.nome} data-reveal>
+              <article className={`plano tem-relevo ${p.destaque ? 'plano--destaque' : ''}`} key={p.nome} data-reveal>
                 <h3>{p.nome}</h3>
                 <div className="plano__preco">
                   {p.apartirDe ? (
@@ -197,7 +197,7 @@ export default function Inicio() {
                   ) : (
                     <>
                       Sob consulta
-                      <small>valor mediante orçamento</small>
+                      <small>orçamento após uma conversa rápida</small>
                     </>
                   )}
                 </div>
@@ -213,7 +213,8 @@ export default function Inicio() {
                   className={`btn ${p.destaque ? 'btn--claro' : 'btn--contorno'}`}
                   href={linkWhatsApp(`Olá! Tenho interesse no plano ${p.nome} da Ramblas Sites.`)}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
+                  onClick={() => evento('whatsapp_click', { origem: `plano-${p.nome}` })}
                 >
                   Falar sobre o plano {p.nome}
                 </a>
@@ -232,7 +233,7 @@ export default function Inicio() {
             <ul className="contato-lista">
               <li>
                 WhatsApp:{' '}
-                <a href={linkWhatsApp()} target="_blank" rel="noopener">
+                <a href={linkWhatsApp()} target="_blank" rel="noopener noreferrer">
                   {contato.whatsappExibicao}
                 </a>
               </li>

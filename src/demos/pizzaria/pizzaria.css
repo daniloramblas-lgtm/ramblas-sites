@@ -94,7 +94,7 @@
   font-size: 0.93rem;
   cursor: pointer;
 }
-.pz-carrinho-botao span {
+.pz-carrinho-botao__quantidade {
   background: var(--vinho);
   color: #f7efe0;
   border-radius: 999px;
@@ -103,6 +103,22 @@
   display: inline-grid;
   place-items: center;
   font-size: 0.78rem;
+}
+@media (max-width: 379px) {
+  .pz-cabecalho__interno {
+    gap: 0.55rem;
+  }
+  .pz-logo {
+    font-size: 1.12rem;
+    gap: 0;
+  }
+  .pz-logo i,
+  .pz-carrinho-botao__texto {
+    display: none;
+  }
+  .pz-carrinho-botao {
+    padding: 0.55rem 0.65rem;
+  }
 }
 
 .pz-hero {

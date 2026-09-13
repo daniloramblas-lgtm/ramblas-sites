@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { areas, enderecoAurea } from './dados'
 import { mascaraTelefone, telefoneValido, emailValido, dataLonga } from '../../lib/format'
+import { erroDeData, hojeSaoPaulo } from '../../lib/datas'
+import { MenuSecoes } from '../../components/DemoShell'
 import { linkWhatsApp, montarMensagem } from '../../lib/whatsapp'
 import { contato } from '../../config/site.config'
 
@@ -13,13 +15,16 @@ export function CabecalhoAurea() {
           <i aria-hidden="true" />
           Áurea Consultoria
         </Link>
-        <nav className="au-nav" aria-label="Navegação do escritório">
-          <Link to="/demonstracao/aurea#sobre">O escritório</Link>
-          <Link to="/demonstracao/aurea#areas">Áreas de atuação</Link>
-          <Link to="/demonstracao/aurea#equipe">Equipe</Link>
-          <Link to="/demonstracao/aurea#conteudos">Conteúdos</Link>
-          <Link to="/demonstracao/aurea#atendimento">Atendimento</Link>
-        </nav>
+        <MenuSecoes
+          rotulo="Navegação do escritório"
+          secoes={[
+            { href: '/demonstracao/aurea#sobre', rotulo: 'O escritório' },
+            { href: '/demonstracao/aurea#areas', rotulo: 'Áreas' },
+            { href: '/demonstracao/aurea#equipe', rotulo: 'Equipe' },
+            { href: '/demonstracao/aurea#conteudos', rotulo: 'Conteúdos' },
+            { href: '/demonstracao/aurea#atendimento', rotulo: 'Atendimento' },
+          ]}
+        />
         <Link className="au-btn au-btn--verde au-btn--pequeno" to="/demonstracao/aurea#atendimento">
           Falar com o escritório
         </Link>
@@ -42,7 +47,7 @@ export function RodapeAurea() {
             </p>
           </div>
           <div>
-            <h4>Áreas de atuação</h4>
+            <h2 className="au-rodape__titulo">Áreas de atuação</h2>
             <ul>
               {areas.map((a) => (
                 <li key={a.slug}>
@@ -52,7 +57,7 @@ export function RodapeAurea() {
             </ul>
           </div>
           <div>
-            <h4>Contato</h4>
+            <h2 className="au-rodape__titulo">Contato</h2>
             <ul>
               <li>
                 <a href={linkWhatsApp('Olá! Vim pela demonstração da Áurea Consultoria.')} target="_blank" rel="noopener">
@@ -117,6 +122,8 @@ export function FormularioAtendimento({ areaPadrao = '' }: { areaPadrao?: string
     if (!telefoneValido(dados.telefone)) e.telefone = 'Informe um telefone com DDD.'
     if (!dados.area) e.area = 'Escolha a área mais próxima do seu assunto.'
     if (dados.assunto.trim().length < 10) e.assunto = 'Descreva o assunto em pelo menos uma frase.'
+    const erroData = erroDeData(dados.data, false)
+    if (erroData) e.data = erroData
     if (!dados.aceite) e.aceite = 'É necessário concordar com o tratamento dos dados.'
     return e
   }
@@ -139,7 +146,7 @@ export function FormularioAtendimento({ areaPadrao = '' }: { areaPadrao?: string
       ],
       'Enviado por um site demonstrativo da Ramblas Sites. Nenhum dado foi armazenado.',
     )
-    window.open(linkWhatsApp(mensagem), '_blank', 'noopener')
+    window.open(linkWhatsApp(mensagem), '_blank', 'noopener,noreferrer')
     setEnviado(true)
   }
 
@@ -220,15 +227,18 @@ export function FormularioAtendimento({ areaPadrao = '' }: { areaPadrao?: string
         {erros.assunto && <span className="au-erro">{erros.assunto}</span>}
       </div>
 
-      <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr' }}>
+      <div className="au-campos-duplos">
         <div className="au-campo">
           <label htmlFor="au-data">Reunião — data pretendida</label>
           <input
             id="au-data"
             type="date"
+            min={hojeSaoPaulo()}
             value={dados.data}
+            aria-invalid={!!erros.data}
             onChange={(e) => setDados({ ...dados, data: e.target.value })}
           />
+          {erros.data && <span className="au-erro">{erros.data}</span>}
         </div>
         <div className="au-campo">
           <label htmlFor="au-periodo">Período</label>

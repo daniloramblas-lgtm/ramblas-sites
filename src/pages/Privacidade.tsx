@@ -1,12 +1,9 @@
 import { contato } from '../config/site.config'
 import { useSeo } from '../lib/seo'
+import { metaPrivacidade } from '../data/rotas'
 
 export default function Privacidade() {
-  useSeo({
-    titulo: 'Política de privacidade — Ramblas Sites',
-    descricao: 'Como a Ramblas Sites trata os dados enviados pelos formulários do site.',
-    caminho: '/privacidade',
-  })
+  useSeo(metaPrivacidade)
 
   return (
     <section className="pagina-texto">

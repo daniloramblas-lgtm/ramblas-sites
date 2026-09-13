@@ -23,21 +23,20 @@ import {
   taxaEntrega,
   type ItemCarrinho,
 } from './carrinho'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, MenuSecoes, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho } from '../../data/rotas'
+import { evento } from '../../lib/analytics'
 import { brl, mascaraTelefone, telefoneValido } from '../../lib/format'
 import { linkWhatsApp, montarMensagem } from '../../lib/whatsapp'
 import { useSeo } from '../../lib/seo'
+import { conjunto } from '../../lib/imagens'
 
-const dadosEstruturados = {
-  '@context': 'https://schema.org',
-  '@type': 'Restaurant',
-  name: 'Forno 27 Pizzaria (empresa fictícia)',
-  servesCuisine: 'Pizza',
-  priceRange: '$$',
-  address: { '@type': 'PostalAddress', streetAddress: 'Rua das Oliveiras, 27', addressCountry: 'BR' },
-  disambiguatingDescription:
-    'Projeto demonstrativo — empresa fictícia criada para apresentar possibilidades de site.',
-}
+const SECOES = [
+  { href: '#cardapio', rotulo: 'Cardápio' },
+  { href: '#visita', rotulo: 'Onde estamos' },
+  { href: '#avaliacoes', rotulo: 'Avaliações' },
+  { href: '#painel', rotulo: 'Painel' },
+]
 
 export default function Pizzaria() {
   const [categoria, setCategoria] = useState<CategoriaProduto | 'todos'>('todos')
@@ -52,17 +51,20 @@ export default function Pizzaria() {
   const [cliente, setCliente] = useState({ nome: '', telefone: '', endereco: '', obs: '' })
   const [erro, setErro] = useState('')
   const [enviado, setEnviado] = useState(false)
+  const [verCardapioTodo, setVerCardapioTodo] = useState(false)
 
-  useSeo({
-    titulo: 'Forno 27 Pizzaria — modelo demonstrativo | Ramblas Sites',
-    descricao:
-      'Modelo demonstrativo de cardápio digital com carrinho e pedido por WhatsApp. Empresa fictícia criada para apresentar possibilidades.',
-    caminho: '/demonstracao/forno-27',
-    imagem: '/img/capa-forno27.webp',
-    dados: dadosEstruturados,
-  })
+  useSeo(metaDemoPorCaminho('/demonstracao/forno-27')!)
 
-  const lista = useMemo(() => buscar(termo, categoria), [termo, categoria])
+  const lista = useMemo(() => {
+    const achados = buscar(termo, categoria)
+    // sem busca e sem filtro, as mais pedidas aparecem primeiro
+    return termo || categoria !== 'todos'
+      ? achados
+      : [...achados].sort((a, b) => Number(!!b.destaque) - Number(!!a.destaque))
+  }, [termo, categoria])
+  const filtrando = Boolean(termo) || categoria !== 'todos'
+  const visiveis = verCardapioTodo || filtrando ? lista : lista.slice(0, 6)
+  const ocultos = lista.length - visiveis.length
   const quantidadeTotal = itens.reduce((t, i) => t + i.quantidade, 0)
   const sub = subtotal(itens)
   const taxa = taxaEntrega(bairro, modo)
@@ -76,6 +78,7 @@ export default function Pizzaria() {
   function confirmarProduto() {
     if (!selecionado) return
     setItens((atuais) => adicionar(atuais, montarItem(selecionado, tamanhoId, extras)))
+    evento('pizza_add_to_cart', { produto: selecionado.id, tamanho: tamanhoId || 'unico' })
     setSelecionado(null)
     setCarrinhoAberto(true)
     setEnviado(false)
@@ -124,7 +127,8 @@ export default function Pizzaria() {
 
   return (
     <div className="demo-pizzaria">
-      <BarraDemonstracao nome="Forno 27 Pizzaria" slug="forno-27" />
+      <PularParaConteudo />
+      <BarraDemo id="forno-27" />
 
       <header className="pz-cabecalho">
         <div className="container pz-cabecalho__interno">
@@ -132,23 +136,19 @@ export default function Pizzaria() {
             <i aria-hidden="true" />
             Forno 27
           </a>
-          <nav className="pz-nav" aria-label="Navegação da pizzaria">
-            <a href="#cardapio">Cardápio</a>
-            <a href="#visita">Onde estamos</a>
-            <a href="#avaliacoes">Avaliações</a>
-            <a href="#painel">Painel</a>
-          </nav>
+          <MenuSecoes secoes={SECOES} rotulo="Navegação da pizzaria" />
           <button
             type="button"
             className="pz-carrinho-botao"
             onClick={() => setCarrinhoAberto(true)}
-            aria-label={`Abrir carrinho com ${quantidadeTotal} itens`}
           >
-            Carrinho <span>{quantidadeTotal}</span>
+            <span className="pz-carrinho-botao__texto">Carrinho</span>
+            <span className="pz-carrinho-botao__quantidade">{quantidadeTotal}</span>
           </button>
         </div>
       </header>
 
+      <main id="conteudo">
       <section className="pz-hero">
         <img src="/img/hero-pizzaria.webp" alt="Forno a lenha aceso em pizzaria artesanal" width={1600} height={900} />
         <div className="container pz-hero__conteudo">
@@ -205,7 +205,7 @@ export default function Pizzaria() {
             </div>
           </div>
 
-          <div className="pz-grade">
+          <div className="pz-grade" id="grade-cardapio">
             {lista.length === 0 && (
               <div className="pz-vazio">
                 <h3>Nada encontrado para “{termo}”</h3>
@@ -223,10 +223,17 @@ export default function Pizzaria() {
               </div>
             )}
 
-            {lista.map((p) => (
+            {visiveis.map((p) => (
               <article className="pz-card" key={p.id}>
                 <figure>
-                  <img src={p.imagem} alt={p.alt} loading="lazy" width={800} height={800} />
+                  <img
+                    {...conjunto(p.imagem, '(max-width: 700px) 45vw, 260px')}
+                    alt={p.alt}
+                    loading="lazy"
+                    decoding="async"
+                    width={800}
+                    height={800}
+                  />
                   {p.destaque && <span className="pz-card__marca">Mais pedida</span>}
                   {!p.destaque && p.vegetariana && <span className="pz-card__marca">Vegetariana</span>}
                 </figure>
@@ -246,6 +253,21 @@ export default function Pizzaria() {
               </article>
             ))}
           </div>
+
+          {ocultos > 0 && (
+            <p style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+              <button
+                type="button"
+                className="pz-btn pz-btn--claro"
+                style={{ borderColor: 'var(--linha)', color: 'var(--grafite)' }}
+                aria-expanded={verCardapioTodo}
+                aria-controls="grade-cardapio"
+                onClick={() => setVerCardapioTodo(true)}
+              >
+                Ver cardápio completo (+{ocultos})
+              </button>
+            </p>
+          )}
         </div>
       </section>
 
@@ -326,6 +348,8 @@ export default function Pizzaria() {
           </p>
         </div>
       </section>
+
+      </main>
 
       <footer className="pz-rodape">
         <div className="container">

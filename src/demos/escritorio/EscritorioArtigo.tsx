@@ -2,7 +2,8 @@ import { Link, useParams } from 'react-router-dom'
 import './escritorio.css'
 import { artigos } from './dados'
 import { CabecalhoAurea, RodapeAurea } from './LayoutAurea'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho, meta404 } from '../../data/rotas'
 import { dataLonga } from '../../lib/format'
 import { useSeo } from '../../lib/seo'
 
@@ -11,29 +12,16 @@ export default function EscritorioArtigo() {
   const artigo = artigos.find((a) => a.slug === slug)
   const outros = artigos.filter((a) => a.slug !== slug)
 
-  useSeo({
-    titulo: artigo ? `${artigo.titulo} — Áurea Consultoria (demonstração)` : 'Artigo não encontrado',
-    descricao: artigo?.resumo ?? 'Artigo não encontrado nesta demonstração.',
-    caminho: `/demonstracao/aurea/artigos/${slug ?? ''}`,
-    imagem: artigo?.capa,
-    dados: artigo
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'Article',
-          headline: artigo.titulo,
-          datePublished: artigo.data,
-          description: artigo.resumo,
-          author: { '@type': 'Organization', name: 'Áurea Consultoria (empresa fictícia)' },
-        }
-      : undefined,
-  })
+  useSeo(metaDemoPorCaminho(`/demonstracao/aurea/artigos/${slug ?? ''}`) ?? meta404)
 
   if (!artigo) {
     return (
       <div className="demo-escritorio">
-        <BarraDemonstracao nome="Áurea Consultoria" slug="aurea" />
+        <PularParaConteudo />
+      <BarraDemo id="aurea" />
         <CabecalhoAurea />
-        <section className="au-interna">
+        <main id="conteudo">
+      <section className="au-interna">
           <div className="container">
             <h1>Artigo não encontrado</h1>
             <Link className="au-btn au-btn--verde" to="/demonstracao/aurea#conteudos">
@@ -41,16 +29,20 @@ export default function EscritorioArtigo() {
             </Link>
           </div>
         </section>
-        <RodapeAurea />
+        </main>
+
+      <RodapeAurea />
       </div>
     )
   }
 
   return (
     <div className="demo-escritorio">
-      <BarraDemonstracao nome="Áurea Consultoria" slug="aurea" />
+      <PularParaConteudo />
+      <BarraDemo id="aurea" />
       <CabecalhoAurea />
 
+      <main id="conteudo">
       <article className="au-interna">
         <div className="container">
           <p className="au-migalhas">
@@ -66,7 +58,7 @@ export default function EscritorioArtigo() {
               <h1 style={{ marginTop: '0.6rem' }}>{artigo.titulo}</h1>
               <img
                 src={artigo.capa}
-                alt={`Fotografia ilustrativa do artigo ${artigo.titulo}`}
+                alt={`Ilustração do artigo ${artigo.titulo}`}
                 style={{ width: '100%', borderRadius: 3, margin: '1.5rem 0' }}
                 width={1000}
                 height={620}
@@ -95,6 +87,8 @@ export default function EscritorioArtigo() {
           </div>
         </div>
       </article>
+
+      </main>
 
       <RodapeAurea />
     </div>

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { enderecoLinhaNorte } from './dados'
 import { linkWhatsApp } from '../../lib/whatsapp'
+import { MenuSecoes } from '../../components/DemoShell'
+import { evento } from '../../lib/analytics'
 
 export function CabecalhoLN() {
   return (
@@ -10,17 +12,21 @@ export function CabecalhoLN() {
           <i aria-hidden="true" />
           Linha Norte Motors
         </Link>
-        <nav className="ln-nav" aria-label="Navegação da concessionária">
-          <Link to="/demonstracao/linha-norte#estoque">Estoque</Link>
-          <Link to="/demonstracao/linha-norte#avaliacao">Avaliar meu usado</Link>
-          <Link to="/demonstracao/linha-norte#test-drive">Test-drive</Link>
-          <Link to="/demonstracao/linha-norte#painel">Painel de estoque</Link>
-        </nav>
+        <MenuSecoes
+          rotulo="Navegação da concessionária"
+          secoes={[
+            { href: '/demonstracao/linha-norte#estoque', rotulo: 'Estoque' },
+            { href: '/demonstracao/linha-norte#avaliar-usado', rotulo: 'Avaliar usado' },
+            { href: '/demonstracao/linha-norte#test-drive', rotulo: 'Test-drive' },
+            { href: '/demonstracao/linha-norte#painel', rotulo: 'Painel' },
+          ]}
+        />
         <a
           className="ln-btn ln-btn--azul ln-btn--pequeno"
           href={linkWhatsApp('Olá! Vim pela demonstração da Linha Norte Motors.')}
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
+          onClick={() => evento('whatsapp_click', { origem: 'linha-norte-cabecalho' })}
         >
           Falar pelo WhatsApp
         </a>

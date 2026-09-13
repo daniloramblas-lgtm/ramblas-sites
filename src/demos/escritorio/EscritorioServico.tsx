@@ -2,26 +2,24 @@ import { Link, useParams } from 'react-router-dom'
 import './escritorio.css'
 import { areas } from './dados'
 import { CabecalhoAurea, FormularioAtendimento, RodapeAurea } from './LayoutAurea'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho, meta404 } from '../../data/rotas'
 import { useSeo } from '../../lib/seo'
 
 export default function EscritorioServico() {
   const { slug } = useParams()
   const area = areas.find((a) => a.slug === slug)
 
-  useSeo({
-    titulo: area ? `${area.nome} — Áurea Consultoria (demonstração)` : 'Área não encontrada',
-    descricao: area?.resumo ?? 'Área não encontrada nesta demonstração.',
-    caminho: `/demonstracao/aurea/areas/${slug ?? ''}`,
-    imagem: '/img/capa-aurea.webp',
-  })
+  useSeo(metaDemoPorCaminho(`/demonstracao/aurea/areas/${slug ?? ''}`) ?? meta404)
 
   if (!area) {
     return (
       <div className="demo-escritorio">
-        <BarraDemonstracao nome="Áurea Consultoria" slug="aurea" />
+        <PularParaConteudo />
+      <BarraDemo id="aurea" />
         <CabecalhoAurea />
-        <section className="au-interna">
+        <main id="conteudo">
+      <section className="au-interna">
           <div className="container">
             <h1>Área não encontrada</h1>
             <p>O endereço acessado não corresponde a nenhuma área desta demonstração.</p>
@@ -30,16 +28,20 @@ export default function EscritorioServico() {
             </Link>
           </div>
         </section>
-        <RodapeAurea />
+        </main>
+
+      <RodapeAurea />
       </div>
     )
   }
 
   return (
     <div className="demo-escritorio">
-      <BarraDemonstracao nome="Áurea Consultoria" slug="aurea" />
+      <PularParaConteudo />
+      <BarraDemo id="aurea" />
       <CabecalhoAurea />
 
+      <main id="conteudo">
       <section className="au-interna">
         <div className="container">
           <p className="au-migalhas">
@@ -84,6 +86,8 @@ export default function EscritorioServico() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <RodapeAurea />
     </div>

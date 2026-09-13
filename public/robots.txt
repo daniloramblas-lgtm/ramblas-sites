@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+# As demonstrações permanecem rastreáveis para que os buscadores leiam
+# o noindex enviado no HTML e no cabeçalho X-Robots-Tag.
 Sitemap: https://ramblassites.netlify.app/sitemap.xml

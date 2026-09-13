@@ -2,7 +2,14 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { categorias, modelos, type Categoria } from '../data/modelos'
 import { EstadoVazio } from './Comuns'
+import { evento } from '../lib/analytics'
+import { conjunto } from '../lib/imagens'
 
+/**
+ * Galeria dos modelos. Os cards ficaram enxutos: imagem em mockup,
+ * nome, segmento, resumo curto e dois botões. A lista completa de
+ * funcionalidades vive na página de cada modelo.
+ */
 export default function GaleriaModelos({ limite }: { limite?: number }) {
   const [filtro, setFiltro] = useState<Categoria | 'todos'>('todos')
 
@@ -38,11 +45,20 @@ export default function GaleriaModelos({ limite }: { limite?: number }) {
           }
         />
       ) : (
-        <div className="grade-modelos">
-          {lista.map((m) => (
-            <article className="card-modelo" key={m.slug} data-reveal>
+        <div className="grade-modelos com-perspectiva">
+          {lista.map((m, i) => (
+            <article className="card-modelo tem-relevo" key={m.slug} data-reveal>
               <figure className="card-modelo__figura">
-                <img src={m.capa} alt={m.alt} loading="lazy" width={1200} height={800} />
+                <div className="mockup">
+                  <img
+                    {...conjunto(m.capa, '(max-width: 760px) 92vw, 44vw')}
+                    alt={m.alt}
+                    width={1200}
+                    height={800}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                </div>
                 <span className="selo card-modelo__selo">Modelo demonstrativo</span>
               </figure>
               <div className="card-modelo__corpo">
@@ -50,17 +66,20 @@ export default function GaleriaModelos({ limite }: { limite?: number }) {
                   <h3>{m.nome}</h3>
                   <span className="card-modelo__segmento">{m.segmento}</span>
                 </div>
-                <p>{m.resumo}</p>
-                <ul className="lista-funcoes">
-                  {m.funcionalidades.map((f) => (
-                    <li key={f}>{f}</li>
-                  ))}
-                </ul>
+                <p>{m.resumoCurto}</p>
                 <div className="card-modelo__acoes">
-                  <Link className="btn btn--primario btn--pequeno" to={m.rotaDemo}>
+                  <Link
+                    className="btn btn--primario btn--pequeno"
+                    to={m.rotaDemo}
+                    onClick={() => evento('open_demo', { modelo: m.slug })}
+                  >
                     Explorar demonstração
                   </Link>
-                  <Link className="btn btn--contorno btn--pequeno" to={`/modelos/${m.slug}`}>
+                  <Link
+                    className="btn btn--contorno btn--pequeno"
+                    to={`/modelos/${m.slug}`}
+                    onClick={() => evento('view_model', { modelo: m.slug })}
+                  >
                     Sobre o modelo
                   </Link>
                 </div>

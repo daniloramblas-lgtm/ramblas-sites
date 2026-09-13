@@ -4,10 +4,14 @@ import './concessionaria.css'
 import { cambios, horariosLinhaNorte, marcas, modelosLista, veiculos } from './dados'
 import { filtrar, filtrosIniciais, rotuloStatus, type Filtros } from './catalogo'
 import { CabecalhoLN, RodapeLN } from './LayoutLN'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho } from '../../data/rotas'
+import { erroDeData, hojeSaoPaulo } from '../../lib/datas'
+import { evento } from '../../lib/analytics'
 import { brl, mascaraTelefone, telefoneValido } from '../../lib/format'
 import { linkWhatsApp, montarMensagem } from '../../lib/whatsapp'
 import { useSeo } from '../../lib/seo'
+import { conjunto } from '../../lib/imagens'
 
 export default function Concessionaria() {
   const [filtros, setFiltros] = useState<Filtros>(filtrosIniciais)
@@ -16,13 +20,7 @@ export default function Concessionaria() {
 
   const lista = useMemo(() => filtrar(filtros), [filtros])
 
-  useSeo({
-    titulo: 'Linha Norte Motors — modelo demonstrativo | Ramblas Sites',
-    descricao:
-      'Modelo demonstrativo de concessionária com catálogo filtrável, comparador e simulação ilustrativa de financiamento. Empresa fictícia.',
-    caminho: '/demonstracao/linha-norte',
-    imagem: '/img/capa-linhanorte.webp',
-  })
+  useSeo(metaDemoPorCaminho('/demonstracao/linha-norte')!)
 
   function alterar<C extends keyof Filtros>(campo: C, valor: Filtros[C]) {
     setFiltros((f) => ({ ...f, [campo]: valor }))
@@ -30,13 +28,16 @@ export default function Concessionaria() {
 
   function alternarComparar(slug: string) {
     setComparar((c) => (c.includes(slug) ? c.filter((s) => s !== slug) : c.length < 3 ? [...c, slug] : c))
+    evento('vehicle_compare', { veiculo: slug })
   }
 
   return (
     <div className="demo-concessionaria">
-      <BarraDemonstracao nome="Linha Norte Motors" slug="linha-norte" />
+      <PularParaConteudo />
+      <BarraDemo id="linha-norte" />
       <CabecalhoLN />
 
+      <main id="conteudo">
       <section className="ln-hero">
         <img
           className="ln-hero__fundo"
@@ -54,7 +55,7 @@ export default function Concessionaria() {
             <a className="ln-btn ln-btn--azul" href="#estoque">
               Ver estoque
             </a>
-            <a className="ln-btn ln-btn--contorno" href="#avaliacao">
+            <a className="ln-btn ln-btn--contorno" href="#avaliar-usado">
               Avaliar meu usado
             </a>
           </div>
@@ -204,9 +205,10 @@ export default function Concessionaria() {
                 <article className="ln-card" key={v.slug}>
                   <figure>
                     <img
-                      src={v.fotos[0]}
+                      {...conjunto(v.fotos[0], '(max-width: 700px) 90vw, 300px')}
                       alt={`${v.marca} ${v.modelo} ${v.versao}, cor ${v.cor}`}
                       loading="lazy"
+                      decoding="async"
                       width={1200}
                       height={800}
                     />
@@ -280,8 +282,12 @@ export default function Concessionaria() {
             <p style={{ color: '#b9c2cc' }}>Formulários demonstrativos: nada é gravado, tudo vai para o WhatsApp.</p>
           </div>
           <div className="ln-formularios">
-            <FormularioAvaliacao />
-            <FormularioTestDrive />
+            <div id="avaliar-usado">
+              <FormularioAvaliacao />
+            </div>
+            <div id="test-drive">
+              <FormularioTestDrive />
+            </div>
           </div>
           <p className="ln-aviso">
             Em um projeto contratado, estes formulários alimentariam o CRM da loja, com histórico de contato
@@ -341,6 +347,8 @@ export default function Concessionaria() {
         </div>
       </section>
 
+      </main>
+
       <RodapeLN />
     </div>
   )
@@ -376,7 +384,7 @@ function FormularioAvaliacao() {
         ),
       ),
       '_blank',
-      'noopener',
+      'noopener,noreferrer',
     )
     setOk(true)
   }
@@ -409,7 +417,7 @@ function FormularioAvaliacao() {
           onChange={(e) => setDados({ ...dados, veiculo: e.target.value })}
         />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+      <div className="ln-campos-duplos">
         <div className="ln-campo">
           <label htmlFor="av-ano">Ano</label>
           <input id="av-ano" type="number" min={1990} max={2026} value={dados.ano} onChange={(e) => setDados({ ...dados, ano: e.target.value })} />
@@ -447,8 +455,13 @@ function FormularioTestDrive() {
 
   function enviar(e: React.FormEvent) {
     e.preventDefault()
-    if (dados.nome.trim().length < 2 || !telefoneValido(dados.telefone) || !dados.data) {
-      setErro('Preencha nome, telefone com DDD e a data desejada.')
+    if (dados.nome.trim().length < 2 || !telefoneValido(dados.telefone)) {
+      setErro('Preencha nome e telefone com DDD.')
+      return
+    }
+    const problemaData = erroDeData(dados.data)
+    if (problemaData) {
+      setErro(problemaData)
       return
     }
     setErro('')
@@ -468,8 +481,9 @@ function FormularioTestDrive() {
         ),
       ),
       '_blank',
-      'noopener',
+      'noopener,noreferrer',
     )
+    evento('test_drive_submit', { veiculo: dados.veiculo })
     setOk(true)
   }
 
@@ -503,10 +517,16 @@ function FormularioTestDrive() {
             ))}
         </select>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+      <div className="ln-campos-duplos">
         <div className="ln-campo">
           <label htmlFor="td-data">Data</label>
-          <input id="td-data" type="date" value={dados.data} onChange={(e) => setDados({ ...dados, data: e.target.value })} />
+          <input
+            id="td-data"
+            type="date"
+            min={hojeSaoPaulo()}
+            value={dados.data}
+            onChange={(e) => setDados({ ...dados, data: e.target.value })}
+          />
         </div>
         <div className="ln-campo">
           <label htmlFor="td-periodo">Período</label>

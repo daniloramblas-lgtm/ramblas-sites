@@ -1,47 +1,37 @@
 import { useState } from 'react'
-import { funcionalidadesDesejadas, segmentosFormulario } from '../config/site.config'
-import { modelos } from '../data/modelos'
+import { Link } from 'react-router-dom'
+import { avisoPrivacidadeCurto, segmentosFormulario } from '../config/site.config'
 import { mascaraTelefone, telefoneValido } from '../lib/format'
 import { linkWhatsApp, montarMensagem } from '../lib/whatsapp'
+import { evento } from '../lib/analytics'
 
-type Dados = {
+export type DadosOrcamento = {
   nome: string
-  empresa: string
-  segmento: string
   whatsapp: string
-  modelo: string
-  funcionalidades: string[]
-  mensagem: string
+  segmento: string
+  necessidade: string
+  /** Preenchido automaticamente quando o formulário abre a partir de um modelo. */
+  modelo?: string
 }
 
-const inicial: Dados = {
-  nome: '',
-  empresa: '',
-  segmento: '',
-  whatsapp: '',
-  modelo: '',
-  funcionalidades: [],
-  mensagem: '',
-}
+const inicial: DadosOrcamento = { nome: '', whatsapp: '', segmento: '', necessidade: '' }
 
-export function textoOrcamento(d: Dados): string {
+export function textoOrcamento(d: DadosOrcamento): string {
   return montarMensagem(
     'Pedido de orçamento pelo site da Ramblas Sites',
     [
       ['Nome', d.nome],
-      ['Empresa', d.empresa],
-      ['Segmento', d.segmento],
       ['WhatsApp', d.whatsapp],
+      ['Segmento', d.segmento],
       ['Modelo de interesse', d.modelo],
-      ['Funcionalidades', d.funcionalidades.join(', ')],
-      ['Mensagem', d.mensagem],
+      ['O que precisa', d.necessidade],
     ],
     'Enviado pelo formulário do site.',
   )
 }
 
-export function validar(d: Dados): Partial<Record<keyof Dados, string>> {
-  const erros: Partial<Record<keyof Dados, string>> = {}
+export function validar(d: DadosOrcamento): Partial<Record<keyof DadosOrcamento, string>> {
+  const erros: Partial<Record<keyof DadosOrcamento, string>> = {}
   if (d.nome.trim().length < 2) erros.nome = 'Escreva seu nome para sabermos com quem falamos.'
   if (!telefoneValido(d.whatsapp)) erros.whatsapp = 'Informe um WhatsApp com DDD, como (11) 90000-0000.'
   if (!d.segmento) erros.segmento = 'Escolha o segmento do seu negócio.'
@@ -49,40 +39,32 @@ export function validar(d: Dados): Partial<Record<keyof Dados, string>> {
 }
 
 export default function FormularioOrcamento({ modeloInicial = '' }: { modeloInicial?: string }) {
-  const [dados, setDados] = useState<Dados>({ ...inicial, modelo: modeloInicial })
-  const [erros, setErros] = useState<Partial<Record<keyof Dados, string>>>({})
-  const [estado, setEstado] = useState<'parado' | 'enviando' | 'pronto'>('parado')
+  const [dados, setDados] = useState<DadosOrcamento>({ ...inicial, modelo: modeloInicial })
+  const [erros, setErros] = useState<Partial<Record<keyof DadosOrcamento, string>>>({})
+  const [enviado, setEnviado] = useState(false)
 
-  function alterar<C extends keyof Dados>(campo: C, valor: Dados[C]) {
+  function alterar<C extends keyof DadosOrcamento>(campo: C, valor: DadosOrcamento[C]) {
     setDados((d) => ({ ...d, [campo]: valor }))
     setErros((e) => ({ ...e, [campo]: undefined }))
-    setEstado('parado')
+    setEnviado(false)
   }
 
-  function alternarFuncionalidade(f: string) {
-    setDados((d) => ({
-      ...d,
-      funcionalidades: d.funcionalidades.includes(f)
-        ? d.funcionalidades.filter((x) => x !== f)
-        : [...d.funcionalidades, f],
-    }))
-  }
-
+  /**
+   * Abre o WhatsApp de forma síncrona, ainda dentro do clique do usuário:
+   * qualquer espera (setTimeout) faz o navegador do celular tratar a aba
+   * nova como popup e bloquear.
+   */
   function enviar(e: React.FormEvent) {
     e.preventDefault()
     const achados = validar(dados)
     setErros(achados)
     if (Object.keys(achados).length > 0) {
-      const primeiro = document.querySelector<HTMLElement>('[aria-invalid="true"]')
-      primeiro?.focus()
+      document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
       return
     }
-    setEstado('enviando')
-    // Pequena espera só para dar retorno visual antes de abrir o WhatsApp.
-    window.setTimeout(() => {
-      window.open(linkWhatsApp(textoOrcamento(dados)), '_blank', 'noopener')
-      setEstado('pronto')
-    }, 450)
+    window.open(linkWhatsApp(textoOrcamento(dados)), '_blank', 'noopener,noreferrer')
+    evento('quote_submit', { segmento: dados.segmento, modelo: dados.modelo || 'nenhum' })
+    setEnviado(true)
   }
 
   return (
@@ -102,41 +84,6 @@ export default function FormularioOrcamento({ modeloInicial = '' }: { modeloInic
           {erros.nome && (
             <span className="campo__erro" id="erro-nome">
               {erros.nome}
-            </span>
-          )}
-        </div>
-
-        <div className="campo">
-          <label htmlFor="of-empresa">Empresa</label>
-          <input
-            id="of-empresa"
-            name="empresa"
-            autoComplete="organization"
-            value={dados.empresa}
-            onChange={(e) => alterar('empresa', e.target.value)}
-          />
-        </div>
-
-        <div className="campo">
-          <label htmlFor="of-segmento">Segmento</label>
-          <select
-            id="of-segmento"
-            name="segmento"
-            value={dados.segmento}
-            aria-invalid={!!erros.segmento}
-            aria-describedby={erros.segmento ? 'erro-segmento' : undefined}
-            onChange={(e) => alterar('segmento', e.target.value)}
-          >
-            <option value="">Selecione</option>
-            {segmentosFormulario.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          {erros.segmento && (
-            <span className="campo__erro" id="erro-segmento">
-              {erros.segmento}
             </span>
           )}
         </div>
@@ -162,64 +109,53 @@ export default function FormularioOrcamento({ modeloInicial = '' }: { modeloInic
         </div>
 
         <div className="campo campo--largo">
-          <label htmlFor="of-modelo">Modelo de interesse</label>
+          <label htmlFor="of-segmento">Segmento</label>
           <select
-            id="of-modelo"
-            name="modelo"
-            value={dados.modelo}
-            onChange={(e) => alterar('modelo', e.target.value)}
+            id="of-segmento"
+            name="segmento"
+            value={dados.segmento}
+            aria-invalid={!!erros.segmento}
+            aria-describedby={erros.segmento ? 'erro-segmento' : undefined}
+            onChange={(e) => alterar('segmento', e.target.value)}
           >
-            <option value="">Ainda não sei</option>
-            {modelos.map((m) => (
-              <option key={m.slug} value={m.nome}>
-                {m.nome} — {m.segmento}
+            <option value="">Selecione</option>
+            {segmentosFormulario.map((s) => (
+              <option key={s} value={s}>
+                {s}
               </option>
             ))}
-            <option value="Projeto do zero">Projeto do zero</option>
           </select>
+          {erros.segmento && (
+            <span className="campo__erro" id="erro-segmento">
+              {erros.segmento}
+            </span>
+          )}
         </div>
 
-        <fieldset className="campo campo--largo" style={{ border: 0, margin: 0, padding: 0 }}>
-          <legend style={{ fontSize: '0.92rem', fontWeight: 600, padding: 0, marginBottom: '0.5rem' }}>
-            Funcionalidades desejadas
-          </legend>
-          <div className="opcoes">
-            {funcionalidadesDesejadas.map((f) => (
-              <label className="opcao" key={f}>
-                <input
-                  type="checkbox"
-                  name="funcionalidades"
-                  value={f}
-                  checked={dados.funcionalidades.includes(f)}
-                  onChange={() => alternarFuncionalidade(f)}
-                />
-                {f}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
         <div className="campo campo--largo">
-          <label htmlFor="of-mensagem">Mensagem</label>
+          <label htmlFor="of-necessidade">O que o site precisa resolver</label>
           <textarea
-            id="of-mensagem"
-            name="mensagem"
-            placeholder="Conte o que o site precisa resolver no seu dia a dia."
-            value={dados.mensagem}
-            onChange={(e) => alterar('mensagem', e.target.value)}
+            id="of-necessidade"
+            name="necessidade"
+            placeholder="Ex.: receber pedidos sem ficar respondendo cardápio por mensagem."
+            value={dados.necessidade}
+            onChange={(e) => alterar('necessidade', e.target.value)}
           />
         </div>
 
+        {dados.modelo && (
+          <p className="campo--largo" style={{ margin: 0, fontSize: '0.9rem', color: 'var(--grafite-2)' }}>
+            Modelo de interesse: <strong>{dados.modelo}</strong>
+          </p>
+        )}
+
         <div className="campo campo--largo">
-          <button className="btn btn--primario" type="submit" disabled={estado === 'enviando'}>
-            {estado === 'enviando' ? (
-              <>
-                <span className="carregando" aria-hidden="true" /> Montando sua mensagem…
-              </>
-            ) : (
-              'Enviar pelo WhatsApp'
-            )}
+          <button className="btn btn--primario" type="submit">
+            Enviar pelo WhatsApp
           </button>
+          <p style={{ fontSize: '0.84rem', color: 'var(--grafite-2)', margin: '0.7rem 0 0' }}>
+            {avisoPrivacidadeCurto} Consulte a <Link to="/privacidade">Política de Privacidade</Link>.
+          </p>
         </div>
 
         {Object.keys(erros).length > 0 && (
@@ -228,11 +164,11 @@ export default function FormularioOrcamento({ modeloInicial = '' }: { modeloInic
           </p>
         )}
 
-        {estado === 'pronto' && (
+        {enviado && (
           <div className="mensagem-sucesso campo--largo" role="status">
-            Mensagem montada. A conversa do WhatsApp abriu em outra aba — se o navegador bloqueou,{' '}
-            <a href={linkWhatsApp(textoOrcamento(dados))} target="_blank" rel="noopener">
-              abra por aqui
+            Mensagem montada e aberta no WhatsApp. Se o aparelho não abriu automaticamente,{' '}
+            <a href={linkWhatsApp(textoOrcamento(dados))} target="_blank" rel="noopener noreferrer">
+              toque aqui
             </a>
             .
           </div>

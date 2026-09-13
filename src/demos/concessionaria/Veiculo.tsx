@@ -3,7 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import './concessionaria.css'
 import { parcela, porSlug, rotuloStatus, totalFinanciado } from './catalogo'
 import { CabecalhoLN, RodapeLN } from './LayoutLN'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho, meta404 } from '../../data/rotas'
 import { brl } from '../../lib/format'
 import { linkWhatsApp, montarMensagem } from '../../lib/whatsapp'
 import { useSeo } from '../../lib/seo'
@@ -15,31 +16,15 @@ export default function Veiculo() {
   const [entrada, setEntrada] = useState(() => Math.round((veiculo?.preco ?? 100000) * 0.3))
   const [meses, setMeses] = useState(48)
 
-  useSeo({
-    titulo: veiculo
-      ? `${veiculo.marca} ${veiculo.modelo} ${veiculo.versao} — Linha Norte Motors (demonstração)`
-      : 'Veículo não encontrado',
-    descricao: veiculo?.resumo ?? 'Veículo não encontrado nesta demonstração.',
-    caminho: `/demonstracao/linha-norte/veiculo/${slug ?? ''}`,
-    imagem: veiculo?.fotos[0],
-    dados: veiculo
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'Car',
-          name: `${veiculo.marca} ${veiculo.modelo} ${veiculo.versao}`,
-          vehicleTransmission: veiculo.cambio,
-          modelDate: String(veiculo.ano),
-          mileageFromOdometer: { '@type': 'QuantitativeValue', value: veiculo.km, unitCode: 'KMT' },
-          disambiguatingDescription: 'Veículo fictício de um projeto demonstrativo.',
-        }
-      : undefined,
-  })
+  useSeo(metaDemoPorCaminho(`/demonstracao/linha-norte/veiculo/${slug ?? ''}`) ?? meta404)
 
   if (!veiculo) {
     return (
       <div className="demo-concessionaria">
-        <BarraDemonstracao nome="Linha Norte Motors" slug="linha-norte" />
+        <PularParaConteudo />
+        <BarraDemo id="linha-norte" />
         <CabecalhoLN />
+        <main id="conteudo">
         <section className="ln-secao">
           <div className="container">
             <h1>Veículo não encontrado</h1>
@@ -49,6 +34,7 @@ export default function Veiculo() {
             </Link>
           </div>
         </section>
+        </main>
         <RodapeLN />
       </div>
     )
@@ -68,9 +54,11 @@ export default function Veiculo() {
 
   return (
     <div className="demo-concessionaria">
-      <BarraDemonstracao nome="Linha Norte Motors" slug="linha-norte" />
+      <PularParaConteudo />
+      <BarraDemo id="linha-norte" />
       <CabecalhoLN />
 
+      <main id="conteudo">
       <section className="ln-secao">
         <div className="container">
           <p className="ln-migalhas">
@@ -210,6 +198,7 @@ export default function Veiculo() {
           </div>
         </div>
       </section>
+      </main>
 
       <RodapeLN />
     </div>

@@ -2,7 +2,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import './concessionaria.css'
 import { porSlug, rotuloStatus } from './catalogo'
 import { CabecalhoLN, RodapeLN } from './LayoutLN'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho } from '../../data/rotas'
 import { brl } from '../../lib/format'
 import { useSeo } from '../../lib/seo'
 
@@ -11,12 +12,7 @@ export default function Comparador() {
   const slugs = (params.get('v') ?? '').split(',').filter(Boolean).slice(0, 3)
   const lista = slugs.map(porSlug).filter((v): v is NonNullable<typeof v> => Boolean(v))
 
-  useSeo({
-    titulo: 'Comparar veículos — Linha Norte Motors (demonstração)',
-    descricao: 'Comparação lado a lado de veículos fictícios do estoque demonstrativo.',
-    caminho: '/demonstracao/linha-norte/comparar',
-    imagem: '/img/capa-linhanorte.webp',
-  })
+  useSeo(metaDemoPorCaminho('/demonstracao/linha-norte/comparar')!)
 
   const linhas: [string, (v: (typeof lista)[number]) => string][] = [
     ['Preço', (v) => brl(v.preco)],
@@ -32,9 +28,11 @@ export default function Comparador() {
 
   return (
     <div className="demo-concessionaria">
-      <BarraDemonstracao nome="Linha Norte Motors" slug="linha-norte" />
+      <PularParaConteudo />
+      <BarraDemo id="linha-norte" />
       <CabecalhoLN />
 
+      <main id="conteudo">
       <section className="ln-secao">
         <div className="container">
           <p className="ln-migalhas">
@@ -51,7 +49,7 @@ export default function Comparador() {
 
           {lista.length < 2 ? (
             <div className="ln-vazio">
-              <h3>Escolha ao menos dois veículos</h3>
+              <h2>Escolha ao menos dois veículos</h2>
               <p>No estoque, marque a opção “Comparar” nos cards que você quer avaliar lado a lado.</p>
               <Link className="ln-btn ln-btn--azul" to="/demonstracao/linha-norte#estoque">
                 Ir para o estoque
@@ -108,6 +106,7 @@ export default function Comparador() {
           )}
         </div>
       </section>
+      </main>
 
       <RodapeLN />
     </div>

@@ -1,30 +1,29 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { modeloPorSlug } from '../data/modelos'
+import { metasModelo } from '../data/rotas'
 import FormularioOrcamento from '../components/FormularioOrcamento'
 import NaoEncontrada from './NaoEncontrada'
 import { useReveal } from '../lib/useReveal'
 import { useSeo } from '../lib/seo'
 import { linkWhatsApp } from '../lib/whatsapp'
+import { evento } from '../lib/analytics'
 import { avisoDemonstrativo } from '../config/site.config'
+import { meta404 } from '../data/rotas'
 
 export default function ModeloDetalhe() {
   const { slug } = useParams()
   const modelo = modeloPorSlug(slug)
+  const meta = metasModelo.find((m) => m.caminho === `/modelos/${slug}`)
   const [modo, setModo] = useState<'desktop' | 'celular'>('desktop')
   useReveal(slug)
-  useSeo({
-    titulo: modelo ? `${modelo.nome} — modelo demonstrativo | Ramblas Sites` : 'Modelo não encontrado',
-    descricao: modelo?.resumo ?? 'Modelo não encontrado.',
-    caminho: `/modelos/${slug ?? ''}`,
-    imagem: modelo?.capa,
-  })
+  useSeo(meta ?? meta404)
 
   if (!modelo) return <NaoEncontrada />
 
   return (
     <>
-      <section className="modelo-topo">
+      <section className="modelo-topo secao-relevo">
         <div className="container">
           <p className="migalhas">
             <Link to="/">Início</Link> / <Link to="/modelos">Modelos</Link> / {modelo.nome}
@@ -32,26 +31,31 @@ export default function ModeloDetalhe() {
 
           <div className="modelo-topo__grade">
             <div>
-              <span className="selo">Modelo demonstrativo</span>
+              <span className="selo">Estudo de caso conceitual</span>
               <h1 style={{ marginTop: '1rem' }}>{modelo.nome}</h1>
-              <p style={{ fontSize: '1.1rem', color: 'var(--grafite-2)' }}>{modelo.resumo}</p>
+              <p style={{ fontSize: '1.08rem', color: 'var(--grafite-2)' }}>{modelo.resumo}</p>
               <p className="nota-demo">{avisoDemonstrativo}</p>
               <div className="hero__acoes">
                 <a
                   className="btn btn--primario"
                   href={linkWhatsApp(`Olá! Quero um site como o modelo ${modelo.nome}.`)}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
+                  onClick={() => evento('whatsapp_click', { origem: `modelo-${modelo.slug}` })}
                 >
                   Quero um site como este
                 </a>
-                <Link className="btn btn--contorno" to={modelo.rotaDemo}>
-                  Abrir demonstração em tela cheia
+                <Link
+                  className="btn btn--contorno"
+                  to={modelo.rotaDemo}
+                  onClick={() => evento('open_demo', { modelo: modelo.slug })}
+                >
+                  Abrir demonstração
                 </Link>
               </div>
             </div>
 
-            <div className="visualizador">
+            <div className="visualizador com-perspectiva">
               <div className="visualizador__barra">
                 <span style={{ fontSize: '0.88rem', color: 'var(--grafite-2)' }}>Prévia do modelo</span>
                 <div className="alternador" role="group" aria-label="Alternar visualização">
@@ -63,12 +67,11 @@ export default function ModeloDetalhe() {
                   </button>
                 </div>
               </div>
-              <div className="visualizador__tela" data-modo={modo}>
-                <img src={modelo.capa} alt={modelo.alt} width={1200} height={800} />
+              <div className="visualizador__tela tem-relevo" data-modo={modo}>
+                <img src={modelo.capa} alt={modelo.alt} width={1200} height={800} decoding="async" />
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--grafite-2)', margin: '0.9rem 0 0' }}>
-                A prévia mostra o enquadramento do layout. Para navegar de verdade,{' '}
-                <Link to={modelo.rotaDemo}>abra a demonstração</Link>.
+                Para navegar de verdade, <Link to={modelo.rotaDemo}>abra a demonstração</Link>.
               </p>
             </div>
           </div>
@@ -76,52 +79,65 @@ export default function ModeloDetalhe() {
       </section>
 
       <section style={{ paddingTop: 0 }}>
-        <div className="container colunas-info">
-          <div className="bloco-info" data-reveal>
-            <h3>Indicado para</h3>
-            <ul>
-              {modelo.indicadoPara.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
+        <div className="container">
+          <div className="caso-grade" data-reveal>
+            <div className="painel-elevado">
+              <h2 style={{ fontSize: '1.3rem' }}>O problema do segmento</h2>
+              <p style={{ color: 'var(--grafite-2)', margin: 0 }}>{modelo.problema}</p>
+            </div>
+            <div className="painel-elevado">
+              <h2 style={{ fontSize: '1.3rem' }}>A solução construída</h2>
+              <p style={{ color: 'var(--grafite-2)', margin: 0 }}>{modelo.solucao}</p>
+            </div>
           </div>
-          <div className="bloco-info" data-reveal>
-            <h3>O que pode ser personalizado</h3>
-            <ul>
-              {modelo.personalizavel.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="bloco-info" data-reveal>
-            <h3>Funcionalidades incluídas</h3>
-            <ul>
-              {modelo.incluso.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="bloco-info" data-reveal>
-            <h3>Integrações opcionais</h3>
-            <ul>
-              {modelo.integracoes.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="bloco-info" data-reveal>
-            <h3>Prazo estimado</h3>
-            <p style={{ color: 'var(--grafite-2)' }}>
-              {modelo.prazo}, contados a partir da aprovação do escopo e da entrega dos conteúdos.
-            </p>
-          </div>
-          <div className="bloco-info" data-reveal>
-            <h3>O que é apenas demonstrativo</h3>
-            <ul>
-              {modelo.demonstrativo.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
+
+          <div className="colunas-info" style={{ marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+            <div className="bloco-info" data-reveal>
+              <h2>Indicado para</h2>
+              <ul>
+                {modelo.indicadoPara.map((i) => (
+                  <li key={i}>{i}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="bloco-info" data-reveal>
+              <h2>O que pode ser personalizado</h2>
+              <ul>
+                {modelo.personalizavel.map((i) => (
+                  <li key={i}>{i}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="bloco-info" data-reveal>
+              <h2>Recursos demonstrados</h2>
+              <ul>
+                {modelo.incluso.map((i) => (
+                  <li key={i}>{i}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="bloco-info" data-reveal>
+              <h2>O que exigiria backend em um projeto real</h2>
+              <ul>
+                {modelo.integracoes.map((i) => (
+                  <li key={i}>{i}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="bloco-info" data-reveal>
+              <h2>Prazo estimado</h2>
+              <p style={{ color: 'var(--grafite-2)' }}>
+                {modelo.prazo}, contados a partir da aprovação do escopo e da entrega dos conteúdos.
+              </p>
+            </div>
+            <div className="bloco-info" data-reveal>
+              <h2>O que é apenas demonstrativo</h2>
+              <ul>
+                {modelo.demonstrativo.map((i) => (
+                  <li key={i}>{i}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -131,8 +147,8 @@ export default function ModeloDetalhe() {
           <div data-reveal>
             <h2>Quero um site como este</h2>
             <p>
-              Já deixamos o modelo selecionado no formulário. Complete o restante e a mensagem vai pronta
-              para o WhatsApp.
+              O modelo já vai anotado na mensagem. Complete o restante e o WhatsApp abre com tudo
+              organizado.
             </p>
           </div>
           <div data-reveal>

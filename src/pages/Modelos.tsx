@@ -1,31 +1,21 @@
 import GaleriaModelos from '../components/GaleriaModelos'
 import { useReveal } from '../lib/useReveal'
 import { useSeo } from '../lib/seo'
-import { avisoDemonstrativo } from '../config/site.config'
+import { metaModelos } from '../data/rotas'
 
 export default function Modelos() {
   useReveal()
-  useSeo({
-    titulo: 'Modelos demonstrativos — Ramblas Sites',
-    descricao:
-      'Explore modelos de site para pizzaria, barbearia, escritórios e concessionária. Empresas fictícias criadas para apresentar possibilidades.',
-    caminho: '/modelos',
-  })
+  useSeo(metaModelos)
 
   return (
-    <section>
+    <section style={{ paddingTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
       <div className="container">
-        <div className="secao-cabecalho" data-reveal>
-          <h2>Modelos demonstrativos</h2>
-          <p>
-            Quatro pontos de partida, com funcionalidades que já rodam no navegador. Use os filtros para ver
-            o segmento mais próximo do seu negócio.
-          </p>
-        </div>
-        <p className="nota-demo" style={{ marginBottom: '2rem' }}>
-          {avisoDemonstrativo} Nenhuma das marcas apresentadas é cliente, e os números, avaliações e preços
-          são ilustrativos.
+        <h1 style={{ fontSize: 'clamp(1.9rem, 4vw, 2.9rem)', margin: '0 0 0.5rem' }}>Modelos demonstrativos</h1>
+        <p style={{ color: 'var(--grafite-2)', margin: '0 0 1.25rem', maxWidth: '58ch' }}>
+          Quatro estudos de caso conceituais, com recursos interativos funcionando na própria demonstração.
+          As empresas são fictícias.
         </p>
+        <h2 className="so-leitor">Lista de modelos por segmento</h2>
         <GaleriaModelos />
       </div>
     </section>

@@ -80,28 +80,28 @@ export const equipe = [
     funcao: 'Sócia — consultoria empresarial',
     formacao: 'Pós-graduada em direito empresarial',
     foto: '/img/aurea-equipe-1.webp',
-    alt: 'Retrato fotográfico de Helena Corvo, integrante fictícia',
+    alt: 'Ilustração de integrante fictícia da equipe',
   },
   {
     nome: 'Bruno Sartori',
     funcao: 'Sócio — contratos',
     formacao: 'Mestre em direito civil',
     foto: '/img/aurea-equipe-2.webp',
-    alt: 'Retrato fotográfico de Bruno Sartori, integrante fictício',
+    alt: 'Ilustração de integrante fictício da equipe',
   },
   {
     nome: 'Marina Duarte',
     funcao: 'Coordenadora — conformidade e LGPD',
     formacao: 'Especialista em proteção de dados',
     foto: '/img/aurea-equipe-3.webp',
-    alt: 'Retrato fotográfico de Marina Duarte, integrante fictícia',
+    alt: 'Ilustração de integrante fictícia da equipe',
   },
   {
     nome: 'Caio Ferraz',
     funcao: 'Consultor — planejamento patrimonial',
     formacao: 'Especialista em planejamento sucessório',
     foto: '/img/aurea-equipe-4.webp',
-    alt: 'Retrato fotográfico de Caio Ferraz, integrante fictício',
+    alt: 'Ilustração de integrante fictício da equipe',
   },
 ]
 

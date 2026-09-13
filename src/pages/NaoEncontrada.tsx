@@ -1,12 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useSeo } from '../lib/seo'
+import { meta404 } from '../data/rotas'
 
 export default function NaoEncontrada() {
-  useSeo({
-    titulo: 'Página não encontrada — Ramblas Sites',
-    descricao: 'O endereço acessado não existe neste site.',
-    caminho: '/404',
-  })
+  useSeo(meta404)
 
   return (
     <section className="container erro-404">

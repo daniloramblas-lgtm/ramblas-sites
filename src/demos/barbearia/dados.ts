@@ -99,7 +99,7 @@ export const profissionais: Profissional[] = [
     nome: 'Rafa Menezes',
     funcao: 'Barbeiro-chefe',
     foto: '/img/barbeiro-1.webp',
-    alt: 'Retrato fotográfico de Rafa Menezes, profissional fictício',
+    alt: 'Ilustração de barbeiro da equipe fictícia',
     dias: [2, 3, 4, 5, 6],
     especialidades: ['Degradê', 'Navalha'],
   },
@@ -108,7 +108,7 @@ export const profissionais: Profissional[] = [
     nome: 'Nico Arruda',
     funcao: 'Barbeiro',
     foto: '/img/barbeiro-2.webp',
-    alt: 'Retrato fotográfico de Nico Arruda, profissional fictício',
+    alt: 'Ilustração de barbeiro da equipe fictícia',
     dias: [1, 2, 3, 4, 5],
     especialidades: ['Barboterapia', 'Corte social'],
   },
@@ -117,7 +117,7 @@ export const profissionais: Profissional[] = [
     nome: 'Tom Vilela',
     funcao: 'Barbeiro',
     foto: '/img/barbeiro-3.webp',
-    alt: 'Retrato fotográfico de Tom Vilela, profissional fictício',
+    alt: 'Ilustração de barbeiro da equipe fictícia',
     dias: [3, 4, 5, 6],
     especialidades: ['Infantil', 'Acabamentos'],
   },
@@ -125,7 +125,7 @@ export const profissionais: Profissional[] = [
 
 export const galeria = Array.from({ length: 6 }, (_, i) => ({
   src: `/img/barbearia-galeria-${i + 1}.webp`,
-  alt: `Fotografia ilustrativa do ambiente e do trabalho da barbearia, imagem ${i + 1}`,
+  alt: `Ilustração de ambiente e trabalho da barbearia, imagem ${i + 1}`,
 }))
 
 export const planos = [

@@ -10,12 +10,22 @@ import {
   servicos,
 } from './dados'
 import { horariosDoDia, profissionalAtende, proximosDias } from './agenda'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, MenuSecoes, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho } from '../../data/rotas'
+import { evento } from '../../lib/analytics'
 import { brl, dataLonga, diaSemanaCurto } from '../../lib/format'
 import { linkWhatsApp, montarMensagem } from '../../lib/whatsapp'
 import { useSeo } from '../../lib/seo'
 
 const categorias = ['Corte', 'Barba', 'Acabamento', 'Combo'] as const
+
+const SECOES = [
+  { href: '#servicos', rotulo: 'Serviços' },
+  { href: '#equipe', rotulo: 'Equipe' },
+  { href: '#agendar', rotulo: 'Agenda' },
+  { href: '#clube', rotulo: 'Clube' },
+  { href: '#visita', rotulo: 'Contato' },
+]
 
 export default function Barbearia() {
   const hoje = useMemo(() => new Date(), [])
@@ -28,6 +38,8 @@ export default function Barbearia() {
   const [nome, setNome] = useState('')
   const [erro, setErro] = useState('')
   const [confirmado, setConfirmado] = useState(false)
+  const [abaServico, setAbaServico] = useState<(typeof categorias)[number]>('Corte')
+  const [galeriaToda, setGaleriaToda] = useState(false)
 
   const servico = servicos.find((s) => s.id === servicoId)!
   const profissional = profissionais.find((p) => p.id === profissionalId)!
@@ -65,40 +77,31 @@ export default function Barbearia() {
       ],
       'Agendamento gerado por um site demonstrativo da Ramblas Sites. Horário sujeito a confirmação.',
     )
-    window.open(linkWhatsApp(mensagem), '_blank', 'noopener')
+    window.open(linkWhatsApp(mensagem), '_blank', 'noopener,noreferrer')
+    evento('booking_complete', { servico: servico.id, profissional: profissional.id })
     setConfirmado(true)
   }
 
-  useSeo({
-    titulo: 'Distrito 13 Barbearia — modelo demonstrativo | Ramblas Sites',
-    descricao:
-      'Modelo demonstrativo de barbearia com agendamento por profissional, data e horário. Empresa fictícia criada para apresentar possibilidades.',
-    caminho: '/demonstracao/distrito-13',
-    imagem: '/img/capa-distrito13.webp',
-  })
+  useSeo(metaDemoPorCaminho('/demonstracao/distrito-13')!)
 
   return (
     <div className="demo-barbearia">
-      <BarraDemonstracao nome="Distrito 13 Barbearia" slug="distrito-13" />
+      <PularParaConteudo />
+      <BarraDemo id="distrito-13" />
 
       <header className="bb-cabecalho">
         <div className="container bb-cabecalho__interno">
           <a className="bb-logo" href="#agendar">
             Distrito <b>13</b>
           </a>
-          <nav className="bb-nav" aria-label="Navegação da barbearia">
-            <a href="#servicos">Serviços</a>
-            <a href="#equipe">Equipe</a>
-            <a href="#agendar">Agenda</a>
-            <a href="#clube">Clube</a>
-            <a href="#visita">Contato</a>
-          </nav>
+          <MenuSecoes secoes={SECOES} rotulo="Navegação da barbearia" />
           <a className="bb-btn bb-btn--cobre bb-btn--pequeno" href="#agendar">
             Agendar horário
           </a>
         </div>
       </header>
 
+      <main id="conteudo">
       <section className="bb-hero">
         <img src="/img/hero-barbearia.webp" alt="Ambiente de barbearia com iluminação quente" width={1600} height={900} />
         <div className="container bb-hero__conteudo">
@@ -125,24 +128,35 @@ export default function Barbearia() {
             <h2>Serviços</h2>
             <p>Valores demonstrativos. Cada serviço tem duração própria e ocupa a agenda pelo tempo real.</p>
           </div>
-          <div className="bb-servicos">
+          <div className="bb-abas" role="tablist" aria-label="Categorias de serviço">
             {categorias.map((cat) => (
-              <div key={cat}>
-                <p className="bb-categoria">{cat}</p>
-                {servicos
-                  .filter((s) => s.categoria === cat)
-                  .map((s) => (
-                    <article className="bb-servico" key={s.id}>
-                      <h3>{s.nome}</h3>
-                      <span className="bb-servico__preco">
-                        {brl(s.preco)}
-                        <small>{s.duracao} min</small>
-                      </span>
-                      <p>{s.descricao}</p>
-                    </article>
-                  ))}
-              </div>
+              <button
+                key={cat}
+                type="button"
+                role="tab"
+                id={`aba-${cat}`}
+                aria-selected={abaServico === cat}
+                aria-controls={`painel-${cat}`}
+                className="bb-aba"
+                onClick={() => setAbaServico(cat)}
+              >
+                {cat}
+              </button>
             ))}
+          </div>
+          <div className="bb-servicos" role="tabpanel" id={`painel-${abaServico}`} aria-labelledby={`aba-${abaServico}`}>
+            {servicos
+              .filter((s) => s.categoria === abaServico)
+              .map((s) => (
+                <article className="bb-servico" key={s.id}>
+                  <h3>{s.nome}</h3>
+                  <span className="bb-servico__preco">
+                    {brl(s.preco)}
+                    <small>{s.duracao} min</small>
+                  </span>
+                  <p>{s.descricao}</p>
+                </article>
+              ))}
           </div>
           <p className="bb-nota">
             Projeto demonstrativo — empresa fictícia criada para apresentar possibilidades. Tabela e
@@ -367,11 +381,24 @@ export default function Barbearia() {
             <h2>Galeria</h2>
             <p>Imagens ilustrativas do ambiente e dos trabalhos.</p>
           </div>
-          <div className="bb-galeria">
-            {galeria.map((g) => (
-              <img key={g.src} src={g.src} alt={g.alt} loading="lazy" width={800} height={800} />
+          <div className="bb-galeria" id="galeria-trabalhos">
+            {(galeriaToda ? galeria : galeria.slice(0, 3)).map((g) => (
+              <img key={g.src} src={g.src} alt={g.alt} loading="lazy" width={800} height={800} decoding="async" />
             ))}
           </div>
+          {!galeriaToda && (
+            <p style={{ marginTop: '1rem' }}>
+              <button
+                type="button"
+                className="bb-btn bb-btn--contorno bb-btn--pequeno"
+                aria-expanded={false}
+                aria-controls="galeria-trabalhos"
+                onClick={() => setGaleriaToda(true)}
+              >
+                Ver mais fotos (+{galeria.length - 3})
+              </button>
+            </p>
+          )}
         </div>
       </section>
 
@@ -430,6 +457,8 @@ export default function Barbearia() {
           </figure>
         </div>
       </section>
+
+      </main>
 
       <footer className="bb-rodape">
         <div className="container">

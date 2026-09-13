@@ -107,6 +107,17 @@
   padding: 0.5rem 0.9rem;
   font-size: 0.87rem;
 }
+@media (max-width: 379px) {
+  .ln-cabecalho__interno {
+    gap: 0.6rem;
+  }
+  .ln-logo {
+    font-size: 1.05rem;
+  }
+  .ln-cabecalho__interno > .ln-btn--pequeno {
+    display: none;
+  }
+}
 .ln-btn[disabled] {
   opacity: 0.45;
   cursor: not-allowed;
@@ -287,7 +298,7 @@
   color: #fff;
 }
 .ln-selo--reservado {
-  background: #b9761f;
+  background: #9b5f0e;
   color: #fff;
 }
 .ln-card__corpo {
@@ -513,6 +524,9 @@
   display: grid;
   gap: 1.5rem;
 }
+.ln-formularios > * {
+  min-width: 0;
+}
 @media (min-width: 900px) {
   .ln-formularios {
     grid-template-columns: 1fr 1fr;
@@ -522,7 +536,24 @@
   background: var(--papel);
   border: 1px solid var(--linha);
   border-radius: 14px;
-  padding: 1.5rem;
+  padding: clamp(1rem, 4vw, 1.5rem);
+  min-width: 0;
+  width: 100%;
+}
+.ln-form .ln-campo input,
+.ln-form .ln-campo select,
+.ln-form .ln-campo textarea {
+  min-width: 0;
+  width: 100%;
+}
+.ln-campos-duplos {
+  display: grid;
+  gap: 0.8rem;
+}
+@media (min-width: 520px) {
+  .ln-campos-duplos {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 .ln-secao--escuro .ln-form {
   background: rgba(255, 255, 255, 0.05);

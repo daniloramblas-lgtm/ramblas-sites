@@ -18,7 +18,7 @@ export default function Rodape() {
           </div>
 
           <div>
-            <h4>Serviços</h4>
+            <h2 className="rodape__titulo">Serviços</h2>
             <ul>
               {servicos.slice(0, 6).map((s) => (
                 <li key={s.nome}>
@@ -29,7 +29,7 @@ export default function Rodape() {
           </div>
 
           <div>
-            <h4>Modelos</h4>
+            <h2 className="rodape__titulo">Modelos</h2>
             <ul>
               {modelos.map((m) => (
                 <li key={m.slug}>
@@ -40,7 +40,7 @@ export default function Rodape() {
           </div>
 
           <div>
-            <h4>Contato</h4>
+            <h2 className="rodape__titulo">Contato</h2>
             <ul>
               <li>
                 <a href={linkWhatsApp()} target="_blank" rel="noopener">

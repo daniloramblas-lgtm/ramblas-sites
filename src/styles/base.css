@@ -16,6 +16,8 @@
   --oliva-claro: #6e8159;
   --terracota: #a04a2f;
   --bronze: #96784c;
+  /* versão escurecida, usada só em textos pequenos (contraste >= 4.5:1) */
+  --bronze-texto: #6f5630;
   --linha: rgba(150, 120, 76, 0.28);
   --linha-forte: rgba(38, 36, 31, 0.14);
 
@@ -31,7 +33,7 @@
   --sans: 'Karla', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --container: 1180px;
-  --pad-secao: clamp(3.5rem, 8vw, 7rem);
+  --pad-secao: clamp(2.25rem, 5.5vw, 4.75rem);
 }
 
 * {
@@ -67,6 +69,7 @@ body {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
@@ -142,7 +145,7 @@ section {
   display: grid;
   gap: clamp(1rem, 3vw, 3rem);
   grid-template-columns: 1fr;
-  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  margin-bottom: clamp(1.25rem, 3vw, 2.25rem);
   align-items: end;
 }
 @media (min-width: 860px) {
@@ -321,8 +324,8 @@ section {
 .logo span {
   font-family: var(--sans);
   font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--bronze);
+  font-weight: 700;
+  color: var(--bronze-texto);
   letter-spacing: 0.04em;
 }
 .menu {
@@ -646,7 +649,7 @@ section {
 }
 .card-modelo__segmento {
   font-size: 0.85rem;
-  color: var(--bronze);
+  color: var(--bronze-texto);
   white-space: nowrap;
 }
 .card-modelo p {
@@ -1041,6 +1044,9 @@ section {
 .rodape .logo {
   color: var(--marfim);
 }
+.rodape .logo span {
+  color: #c6a570;
+}
 .rodape__grade {
   display: grid;
   gap: 2.5rem;
@@ -1050,7 +1056,7 @@ section {
     grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   }
 }
-.rodape h4 {
+.rodape__titulo {
   font-family: var(--sans);
   font-size: 0.88rem;
   font-weight: 700;
@@ -1104,10 +1110,6 @@ section {
 .whats-flutuante:hover {
   transform: translateY(-2px);
   background: #19653f;
-}
-/* Mantém o contato livre quando a hospedagem exibe seu selo flutuante. */
-body:has(#nl-badge-frame) .whats-flutuante {
-  bottom: clamp(4.75rem, 7vw, 5.25rem);
 }
 .whats-flutuante svg {
   width: 20px;
@@ -1245,35 +1247,182 @@ body:has(#nl-badge-frame) .whats-flutuante {
   gap: 0.4rem;
 }
 
-/* -------------------------------------------------- barra da demonstração */
-.barra-demo {
-  background: var(--preto);
-  color: var(--marfim);
-  font-size: 0.86rem;
-  padding: 0.6rem 0;
-  position: relative;
-  z-index: 120;
-}
-.barra-demo__interno {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-.barra-demo a {
-  color: var(--marfim);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.barra-demo strong {
-  font-weight: 600;
-}
-
 .erro-404 {
   min-height: 60vh;
   display: grid;
   place-content: center;
   text-align: center;
   gap: 1rem;
+}
+
+/* ---------------------------------------------- home compacta (v2) */
+.hero__pontos {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.hero__pontos li {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--grafite-2);
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  box-shadow: var(--sombra-1);
+}
+
+.grade-servicos-compacta {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.servico-card {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: var(--r-lg);
+  padding: 1.2rem 1.3rem 1.4rem;
+  box-shadow: var(--sombra-1);
+  transition: transform 0.25s var(--mola), box-shadow 0.25s var(--mola);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .servico-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sombra-2);
+  }
+}
+.servico-card h3 {
+  font-size: 1.08rem;
+  margin-bottom: 0.35rem;
+}
+.servico-card p {
+  margin: 0;
+  font-size: 0.93rem;
+  color: var(--grafite-2);
+}
+
+.etapas-compactas {
+  list-style: none;
+  counter-reset: etapa;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+}
+.etapas-compactas li {
+  counter-increment: etapa;
+  border-top: 1px solid rgba(248, 244, 236, 0.2);
+  padding-top: 0.9rem;
+}
+.etapas-compactas li::before {
+  content: counter(etapa, decimal-leading-zero);
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--bronze);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.etapas-compactas h3 {
+  font-size: 1.12rem;
+  margin: 0 0 0.25rem;
+}
+.etapas-compactas p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: rgba(248, 244, 236, 0.72);
+}
+
+.quem-faz {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+}
+@media (min-width: 820px) {
+  .quem-faz {
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.quem-faz__retrato {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--oliva), #2c3826);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--sombra-2);
+  max-width: 300px;
+}
+.quem-faz__retrato img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.monograma {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 9vw, 4.5rem);
+  color: var(--marfim);
+  letter-spacing: 0.04em;
+}
+.quem-faz__pontos {
+  list-style: none;
+  margin: 1.1rem 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--grafite-2);
+}
+.quem-faz__pontos li {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 0.7rem;
+  align-items: baseline;
+}
+.quem-faz__pontos li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--bronze);
+}
+
+.caso-grade {
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 820px) {
+  .caso-grade {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.bloco-info h2 {
+  font-size: 1.2rem;
+  font-family: var(--serif);
+}
+
+.rodape__titulo {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--marfim);
+  margin: 0 0 0.9rem;
+  letter-spacing: 0;
+}
+
+/* visível só para leitores de tela */
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }

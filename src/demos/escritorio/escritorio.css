@@ -7,6 +7,7 @@
   --verde-claro: #1d5244;
   --azul: #1b2b44;
   --dourado: #b08d47;
+  --dourado-texto: #82662d;
   --texto: #23271f;
   --texto-2: #575e52;
   --linha: rgba(35, 39, 31, 0.14);
@@ -106,6 +107,17 @@
 .au-btn--pequeno {
   padding: 0.55rem 1.1rem;
   font-size: 0.88rem;
+}
+@media (max-width: 379px) {
+  .au-cabecalho__interno {
+    gap: 0.6rem;
+  }
+  .au-logo {
+    font-size: 1.15rem;
+  }
+  .au-cabecalho__interno > .au-btn--pequeno {
+    display: none;
+  }
 }
 
 .au-hero {
@@ -274,7 +286,7 @@
 .au-pessoa span {
   display: block;
   font-size: 0.9rem;
-  color: var(--dourado);
+  color: var(--dourado-texto);
 }
 .au-pessoa small {
   color: var(--texto-2);
@@ -284,15 +296,13 @@
 .au-colunas {
   display: grid;
   gap: 2.5rem;
-  grid-template-columns: minmax(0, 1fr);
-  min-width: 0;
 }
 .au-colunas > * {
   min-width: 0;
 }
 @media (min-width: 960px) {
   .au-colunas {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: 1fr 1fr;
     align-items: start;
   }
 }
@@ -301,6 +311,16 @@
   border: 1px solid var(--linha);
   padding: clamp(1.4rem, 3vw, 2rem);
   min-width: 0;
+  width: 100%;
+}
+.au-campos-duplos {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 560px) {
+  .au-campos-duplos {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 .au-secao--verde .au-formulario {
   background: rgba(255, 255, 255, 0.06);
@@ -320,13 +340,13 @@
 .au-campo select,
 .au-campo textarea {
   font: inherit;
-  width: 100%;
-  min-width: 0;
   padding: 0.75rem 0.9rem;
   border: 1px solid var(--linha);
   border-radius: 2px;
   background: var(--papel);
   color: var(--texto);
+  min-width: 0;
+  width: 100%;
 }
 .au-secao--verde .au-campo input,
 .au-secao--verde .au-campo select,
@@ -362,6 +382,10 @@
   text-align: center;
   font-size: 0.92rem;
   color: var(--texto-2);
+}
+.au-secao--verde .au-arquivos,
+.au-secao--verde .au-arquivos p {
+  color: #f6f2e8;
 }
 .au-arquivos ul {
   list-style: none;
@@ -413,7 +437,7 @@
   font-size: 0.93rem;
 }
 .au-artigo small {
-  color: var(--dourado);
+  color: var(--dourado-texto);
   font-size: 0.83rem;
 }
 .au-artigo a {
@@ -486,7 +510,7 @@
     grid-template-columns: 1.5fr 1fr 1fr;
   }
 }
-.au-rodape h4 {
+.au-rodape .au-rodape__titulo {
   color: #fbf8f0;
   font-size: 0.9rem;
   margin: 0 0 0.8rem;
@@ -538,4 +562,10 @@
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
     align-items: start;
   }
+}
+
+.au-rodape__titulo {
+  font-family: 'Karla', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
 }

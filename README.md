@@ -1,176 +1,113 @@
 # Ramblas Sites
 
-Site institucional da Ramblas Sites com quatro modelos demonstrativos navegáveis (pizzaria, barbearia, escritório e concessionária). Feito em **React + Vite + TypeScript**, sem dependências pagas, pronto para GitHub e Netlify.
+Vitrine comercial da Ramblas Sites com quatro demonstrações navegáveis (pizzaria, barbearia, escritório e concessionária). **React + Vite + TypeScript**, sem dependências pagas, com prerenderização no build e publicação no Netlify.
 
-> Todas as empresas apresentadas nos modelos são **fictícias**: “Projeto demonstrativo — empresa fictícia criada para apresentar possibilidades.” Nenhuma é cliente real, e preços, avaliações, equipes e estoques são ilustrativos. As fotografias também foram criadas com IA para compor essas demonstrações.
+> As empresas das demonstrações são **fictícias** e ficam fora do índice de busca (`noindex,follow`). Não representam clientes, casos reais ou resultados.
 
 ---
 
-## 1. Rodar localmente
-
-Pré-requisito: Node.js 20.19 ou superior (ou Node.js 22.12+).
+## 1. Rodar e verificar
 
 ```bash
-npm install      # instala as dependências
-npm run dev      # inicia em http://localhost:5173
-npm run test     # roda os testes das regras de negócio
-npm run build    # gera a pasta dist/ para publicação
-npm run preview  # serve a dist/ localmente para conferência
+npm install
+npm run dev          # http://localhost:5173
+npm run test         # 49 testes das regras de negócio
+npm run build        # dist/ com HTML por rota, 404.html e sitemap
+npm run auditoria    # renderiza todas as rotas e confere estrutura/acessibilidade
+npm run verificar    # testes + build + auditoria de uma vez
+npm run imagens      # atualiza as variantes -480/-800 das imagens atuais
+npm run imagens:ilustracoes # recria as ilustrações e depois as variantes
 ```
+
+`npm run auditoria` roda sem navegador: renderiza cada rota no Node e falha se aparecer mais de um `<main>`, `<h1>` faltando ou duplicado, salto de nível de título, imagem sem `alt`/`width`/`height`, arquivo de imagem inexistente, âncora `#destino` inexistente ou link `target="_blank"` sem `noopener`.
 
 ---
 
 ## 2. Onde alterar cada coisa
 
-### Contato, WhatsApp, preços, serviços e textos
-Arquivo único: **`src/config/site.config.ts`**
+### `src/config/site.config.ts` — arquivo central
 
-| O que mudar | Onde |
+| O que mudar | Campo |
 | --- | --- |
-| Número do WhatsApp | `contato.whatsapp` (só números, com o 55 na frente: `5511999998888`) |
-| WhatsApp exibido na tela | `contato.whatsappExibicao` |
-| E-mail, LinkedIn, cidade, domínio | `contato` |
-| Mensagem padrão do botão flutuante | `mensagemPadrao` |
-| Itens do menu | `navegacao` |
-| Título e texto do topo | `hero` |
-| Benefícios, serviços, etapas | `beneficios`, `servicos`, `etapas` |
-| **Preços dos planos** | `planos` → campo `apartirDe` (informe o número ou deixe `''` para exibir “Sob consulta”) |
-| Perguntas do FAQ | `faq` |
-| Opções do formulário | `funcionalidadesDesejadas`, `segmentosFormulario` |
+| **Número do WhatsApp** | `contato.whatsapp` (só números, com 55: `5511999998888`) |
+| Número exibido na tela | `contato.whatsappExibicao` |
+| E-mail, LinkedIn, portfólio, cidade, domínio | `contato` |
+| Menu, hero e pontos do hero | `navegacao`, `hero` |
+| Serviços (os 6 com `destaque: true` aparecem primeiro na home) | `servicos` |
+| Etapas do "Como funciona" | `etapas` |
+| **Sua apresentação e sua foto** | `quemFaz` |
+| Preços | `planos.apartirDe` (vazio = "Sob consulta") e `planosIntro` |
+| FAQ da home (5 perguntas) | `faq` |
+| Aviso curto de privacidade no formulário | `avisoPrivacidadeCurto` |
 
-### Dados dos modelos (cards e páginas individuais)
-**`src/data/modelos.ts`** — nome, segmento, resumo, capa, funcionalidades, indicações, personalizações, integrações, prazo e o que é apenas demonstrativo.
+### Outros arquivos de conteúdo
 
-### Conteúdo de cada demonstração
-
-| Modelo | Arquivo de dados |
-| --- | --- |
-| Forno 27 (pizzaria) | `src/demos/pizzaria/dados.ts` — produtos, tamanhos, adicionais, bairros e taxas, horários, avaliações |
-| Distrito 13 (barbearia) | `src/demos/barbearia/dados.ts` — serviços, duração, preços, equipe, planos, horários |
-| Áurea (escritório) | `src/demos/escritorio/dados.ts` — áreas de atuação, equipe, artigos, FAQ |
-| Linha Norte (concessionária) | `src/demos/concessionaria/dados.ts` — estoque, fotos, equipamentos, status |
+- `src/data/modelos.ts` — cards, estudo de caso (problema/solução), personalizações, prazos.
+- `src/data/rotas.ts` — **título, descrição, canonical, OG e robots de cada rota**. É esta lista que a prerenderização usa; rota nova precisa entrar aqui.
+- `src/data/demos.ts` — as quatro demonstrações do seletor.
+- `src/demos/<modelo>/dados.ts` — produtos, serviços, equipe, artigos, estoque.
 
 ### Aparência
-- Cores e tipografia do site principal: `src/styles/base.css` (tokens no `:root`).
-- Cada demonstração tem CSS próprio e isolado: `src/demos/<modelo>/<modelo>.css`, escopado pela classe raiz (`.demo-pizzaria`, `.demo-barbearia`, `.demo-escritorio`, `.demo-concessionaria`).
+
+- `src/styles/base.css` — tokens de cor e tipografia do site principal.
+- `src/styles/tres-d.css` — camada de profundidade: mockups, vidro fosco, sombras, seletor, âncoras (`--altura-topo`).
+- `src/demos/<modelo>/<modelo>.css` — identidade própria de cada demonstração, escopada pela classe raiz.
 
 ### Imagens
-Ficam em `public/img/`, todas em **WebP** e sem links externos. As 64 imagens comerciais são fotografias criadas com IA; os quatro mapas são ilustrações vetoriais próprias. As pessoas, empresas, endereços e veículos representados são fictícios.
 
-- O arquivo `docs/IMAGENS-GERADAS.md` registra a direção visual, a relação de ativos e as famílias de prompts usadas.
-- Para trocar uma fotografia, substitua o arquivo em `public/img/` mantendo o mesmo nome e dimensão, ou aponte um novo caminho no arquivo de dados correspondente. Preserve o WebP e atualize o texto alternativo (`alt`).
-- `scripts/gerar_imagens.py` é o gerador vetorial original e permanece apenas como recurso de contingência. Executá-lo sobrescreve as fotografias atuais.
+`public/img/`, em WebP, com variantes `-480` e `-800` (`scripts/variantes_imagens.py`) usadas via `srcset`. Para usar fotos reais, substitua os arquivos mantendo os nomes e rode `npm run imagens` para recriar somente as variantes. `npm run imagens:ilustracoes` deve ser usado apenas quando você quiser substituir tudo pelas ilustrações geradas por código.
 
 ---
 
-## 3. Estrutura de pastas
+## 3. O que muda com o build
 
-```
-ramblas-sites/
-├── index.html                 # SEO base, Open Graph, fontes
-├── netlify.toml               # build + redirect de SPA + cache
-├── public/
-│   ├── _redirects             # redundância do redirect para o Netlify
-│   ├── favicon.svg, robots.txt, sitemap.xml
-│   └── img/                   # 68 imagens WebP
-├── docs/IMAGENS-GERADAS.md    # direção visual e registro dos ativos fotográficos
-├── scripts/gerar_imagens.py   # gerador vetorial legado (sobrescreve as fotos)
-└── src/
-    ├── config/site.config.ts  # ← arquivo central de configuração
-    ├── data/modelos.ts        # galeria e páginas dos modelos
-    ├── lib/                   # formatação, WhatsApp, SEO, animação de entrada
-    ├── components/            # cabeçalho, rodapé, galeria, formulário, comuns
-    ├── pages/                 # Início, Modelos, Modelo, Privacidade, 404
-    ├── styles/base.css        # tokens e estilos do site principal
-    ├── demos/
-    │   ├── pizzaria/          # dados, carrinho (lógica pura), tela e CSS
-    │   ├── barbearia/         # dados, agenda (lógica pura), tela e CSS
-    │   ├── escritorio/        # dados, layout, home, área e artigo
-    │   └── concessionaria/    # dados, catálogo (lógica pura), tela, veículo, comparador
-    └── tests/regras.test.ts   # 33 testes das regras de negócio
-```
+`npm run build` executa `tsc` + `vite build` + `scripts/prerender.mjs`. A pré-geração grava **um HTML de entrada por rota** (28 no total) já com:
 
-### Rotas
+- `<title>` e meta description próprios;
+- `canonical` correto (nada apontando para `/`);
+- Open Graph e Twitter Card completos;
+- `robots`: `index,follow` nas páginas comerciais e `noindex,follow` em `/demonstracao/**`;
+- dados estruturados só nas páginas reais — as demonstrações fictícias **não** usam `Restaurant`, `Car`, `Article` nem `ProfessionalService`; os modelos aparecem como `CreativeWork`;
+- `preload` da imagem principal apenas na home;
+- `sitemap.xml` gerado com as 7 páginas indexáveis (home, `/modelos`, os quatro modelos e a política).
 
-| Rota | Página |
-| --- | --- |
-| `/` | Home com hero, benefícios, modelos, serviços, como funciona, planos, contato e FAQ |
-| `/modelos` | Galeria completa com filtros |
-| `/modelos/:slug` | Página individual do modelo, com alternador computador/celular |
-| `/demonstracao/forno-27` | Pizzaria |
-| `/demonstracao/distrito-13` | Barbearia |
-| `/demonstracao/aurea` | Escritório |
-| `/demonstracao/aurea/areas/:slug` | Área de atuação |
-| `/demonstracao/aurea/artigos/:slug` | Artigo |
-| `/demonstracao/linha-norte` | Concessionária |
-| `/demonstracao/linha-norte/veiculo/:slug` | Veículo |
-| `/demonstracao/linha-norte/comparar?v=a,b` | Comparador |
-| `/privacidade` | Política de privacidade |
+Como o Netlify serve arquivos estáticos antes dos redirects, cada rota entrega seus metadados corretos mesmo antes do JavaScript. A interface interativa depende de JavaScript. O que não existe cai na regra do `netlify.toml` que responde **404 de verdade** (`/404.html`, com `noindex` e links para a home e para os modelos).
 
 ---
 
-## 4. Publicar no GitHub e no Netlify
+## 4. Publicar
 
-### GitHub
 ```bash
-git init
 git add .
-git commit -m "Ramblas Sites"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/ramblas-sites.git
-git push -u origin main
+git commit -m "Revisão: páginas mais curtas, seletor de demonstrações, SEO e 3D"
+git push origin main
 ```
 
-### Netlify
-1. Netlify → **Add new site → Import an existing project → GitHub** e escolha o repositório.
-2. As configurações já vêm do `netlify.toml`:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-3. **Deploy**. A cada `git push` na branch `main`, o Netlify republica sozinho.
-4. Em **Site configuration → Domain management** você define o subdomínio `.netlify.app` ou aponta um domínio próprio.
+O Netlify republica sozinho (`npm run build` → `dist`). Depois de comprar um domínio: troque `contato.site` em `site.config.ts`, o `robots.txt` e os endereços do `index.html`; no Netlify, aponte o domínio e deixe o `.netlify.app` redirecionando para ele.
 
-O `netlify.toml` e o `public/_redirects` já contêm a regra `/* → /index.html 200`, necessária para as rotas internas (`/modelos/forno-27`, por exemplo) funcionarem quando o visitante abre o link direto ou atualiza a página.
-
-Depois de publicar, troque o domínio em `contato.site` (`src/config/site.config.ts`), no `index.html` (canonical e Open Graph), no `sitemap.xml` e no `robots.txt`.
+**Selo "Powered by Netlify":** não dá para remover por código (esconder com CSS violaria os termos). Em Site configuration → General, procure a opção do badge; se o plano atual não permitir desativá-la, ela sai ao migrar de plano ou ao usar domínio próprio conforme a política vigente do Netlify.
 
 ---
 
-## 5. O que é funcional e o que é demonstrativo
+## 5. Analytics (opcional)
 
-### Funciona de verdade no navegador
-- Menu mobile, navegação entre páginas, âncoras e rolagem.
-- Filtros e busca do cardápio da pizzaria; escolha de tamanho e adicionais; carrinho com quantidade, entrega/retirada, taxa por bairro e cálculo de subtotal e total.
-- Agenda da barbearia: escolha de serviço, profissional, dia e horário, com bloqueio dos dias em que o profissional não atende.
-- Catálogo da concessionária: busca, filtros de marca, modelo, câmbio, ano, preço e quilometragem, ordenação, comparador de até três veículos e simulador de parcelas.
-- Todos os formulários validam os campos e montam a mensagem organizada para o WhatsApp.
-- Estados de carregamento, vazio, sucesso e erro.
-
-### É apenas demonstrativo
-- **Nada é gravado**: carrinho, agenda, comparação e formulários vivem só na sessão do navegador.
-- Horários livres da barbearia são gerados por uma função determinística, não por uma agenda real.
-- Avaliações, endereços, mapas, equipes, artigos, veículos e preços são fictícios.
-- A simulação de financiamento usa a fórmula Price a 1,49% ao mês, sem consulta a banco, sem análise de crédito e sem tarifas. Não é oferta.
-- O “envio de documentos” do escritório apenas lista os arquivos escolhidos; nada sai do navegador.
-- Os painéis administrativos são apresentados como possibilidade, não existem nesta versão.
-
-### O que exigiria backend em um projeto real
-| Recurso | O que é necessário |
-| --- | --- |
-| Painel administrativo (produtos, preços, estoque, conteúdos) | Banco de dados, autenticação e área protegida |
-| Agenda com bloqueio de horário e lembretes | Banco de dados + API oficial do WhatsApp ou serviço de mensagens |
-| Pagamento online (Pix, cartão) | Gateway de pagamento e servidor para confirmar transações |
-| Envio de formulários por e-mail ou CRM | Serviço de e-mail transacional ou integração com CRM |
-| Guarda de documentos enviados | Armazenamento com controle de acesso e política de retenção |
-| Importação de estoque por planilha/XML e publicação em portais | Rotina de integração no servidor |
-| Cálculo real de frete por distância | API de rotas e cadastro de zonas de entrega |
+Sem a variável `VITE_GA_ID`, nenhum script é carregado e nenhum cookie é criado. Para ativar, defina a variável no Netlify ou em `.env` (veja `.env.example`). Eventos enviados: `view_model`, `open_demo`, `switch_demo`, `whatsapp_click`, `quote_submit`, `pizza_add_to_cart`, `booking_complete`, `vehicle_compare`, `test_drive_submit` — todos sem nome, telefone, endereço ou mensagem.
 
 ---
 
-## 6. Qualidade
+## 6. O que funciona e o que é demonstrativo
 
-- HTML semântico, navegação por teclado com foco visível e link “pular para o conteúdo”.
-- Contraste conferido nos textos sobre fundos claros e escuros; `prefers-reduced-motion` respeitado.
-- Títulos, descrições, canonical, Open Graph e dados estruturados (JSON-LD) atualizados por página.
-- Imagens WebP com `width`, `height`, `loading="lazy"` e texto alternativo.
-- Demonstrações carregadas sob demanda (code splitting), para a home abrir leve no celular.
-- 33 testes automatizados cobrindo carrinho, busca, agenda, filtros, financiamento, máscaras e montagem das mensagens.
+**Funciona no navegador:** menu mobile da home e das demonstrações, seletor entre os quatro modelos, filtros da galeria, cardápio com busca/filtros/tamanhos/adicionais/carrinho/entrega/taxa por bairro, agenda com serviço–profissional–dia–horário, catálogo com filtros, ordenação, comparador e simulador, todos os formulários com validação e envio em um clique para o WhatsApp.
+
+**É demonstrativo:** nada é gravado; horários livres são gerados por função determinística; avaliações, equipes, artigos, veículos, endereços e preços são fictícios; a simulação de financiamento usa Price a 1,49% ao mês sem consulta a banco; o envio de documentos só lista arquivos no navegador; os painéis administrativos são apresentados como possibilidade, não existem nesta versão.
+
+**Exigiria backend:** painel administrativo, agenda com bloqueio e lembretes, pagamento online, envio por e-mail/CRM, guarda de documentos, importação de estoque e cálculo real de frete.
+
+---
+
+## 7. Pendências que dependem de você
+
+1. Adicionar sua foto em `public/img/` e apontar em `quemFaz.foto` (sem foto, aparece um monograma).
+2. Decidir sobre os preços: hoje os três planos mostram "Sob consulta", com a introdução coerente com isso.
+3. Desativar o selo do Netlify e, quando houver domínio, atualizar os endereços.
+4. Rodar Lighthouse novamente depois de cada alteração relevante no site publicado.

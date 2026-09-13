@@ -2,32 +2,21 @@ import { Link } from 'react-router-dom'
 import './escritorio.css'
 import { areas, artigos, enderecoAurea, equipe, faqAurea } from './dados'
 import { CabecalhoAurea, FormularioAtendimento, RodapeAurea } from './LayoutAurea'
-import { BarraDemonstracao } from '../../components/Comuns'
+import { BarraDemo, PularParaConteudo } from '../../components/DemoShell'
+import { metaDemoPorCaminho } from '../../data/rotas'
 import { dataLonga } from '../../lib/format'
 import { useSeo } from '../../lib/seo'
 
 export default function Escritorio() {
-  useSeo({
-    titulo: 'Áurea Consultoria — modelo demonstrativo | Ramblas Sites',
-    descricao:
-      'Modelo demonstrativo institucional para escritórios de advocacia, contabilidade, seguros, arquitetura ou consultoria. Empresa fictícia.',
-    caminho: '/demonstracao/aurea',
-    imagem: '/img/capa-aurea.webp',
-    dados: {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
-      name: 'Áurea Consultoria (empresa fictícia)',
-      disambiguatingDescription:
-        'Projeto demonstrativo — empresa fictícia criada para apresentar possibilidades de site.',
-      areaServed: 'BR',
-    },
-  })
+  useSeo(metaDemoPorCaminho('/demonstracao/aurea')!)
 
   return (
     <div className="demo-escritorio">
-      <BarraDemonstracao nome="Áurea Consultoria" slug="aurea" />
+      <PularParaConteudo />
+      <BarraDemo id="aurea" />
       <CabecalhoAurea />
 
+      <main id="conteudo">
       <section className="au-hero">
         <img src="/img/hero-escritorio.webp" alt="Ambiente de escritório com luz natural" width={1600} height={900} />
         <div className="container au-hero__conteudo">
@@ -75,7 +64,7 @@ export default function Escritorio() {
               </p>
             </div>
           </div>
-          <img src="/img/aurea-sobre.webp" alt="Fotografia ilustrativa do ambiente do escritório" loading="lazy" width={1200} height={800} />
+          <img src="/img/aurea-sobre.webp" alt="Ilustração do ambiente do escritório" loading="lazy" width={1200} height={800} />
         </div>
       </section>
 
@@ -146,9 +135,9 @@ export default function Escritorio() {
             <p>Artigos informativos escritos para clientes e equipes internas.</p>
           </div>
           <div className="au-artigos">
-            {artigos.map((a) => (
+            {artigos.slice(0, 2).map((a) => (
               <article className="au-artigo" key={a.slug}>
-                <img src={a.capa} alt={`Fotografia ilustrativa do artigo ${a.titulo}`} loading="lazy" width={1000} height={620} />
+                <img src={a.capa} alt={`Ilustração do artigo ${a.titulo}`} loading="lazy" width={1000} height={620} />
                 <div className="au-artigo__corpo">
                   <small>
                     {dataLonga(a.data)} · {a.leitura}
@@ -188,6 +177,8 @@ export default function Escritorio() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <RodapeAurea />
     </div>

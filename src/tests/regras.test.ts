@@ -19,6 +19,9 @@ import { emailValido, mascaraTelefone, telefoneValido } from '../lib/format'
 import { linkWhatsApp, montarMensagem } from '../lib/whatsapp'
 import { validar, textoOrcamento } from '../components/FormularioOrcamento'
 import { modelos, modeloPorSlug } from '../data/modelos'
+import { dataNoPassado, erroDeData, hojeSaoPaulo, somarDias } from '../lib/datas'
+import { todasAsRotas, metasDemo, metasModelo, metaHome, metaDemoPorCaminho } from '../data/rotas'
+import { demos, demoPorId } from '../data/demos'
 
 const margherita = produtos.find((p) => p.id === 'margherita')!
 const refrigerante = produtos.find((p) => p.id === 'refrigerante')!
@@ -205,12 +208,10 @@ describe('mensagens de WhatsApp', () => {
 describe('formulário de orçamento', () => {
   const base = {
     nome: 'Ana',
-    empresa: 'Padaria Aurora',
-    segmento: 'Alimentação',
     whatsapp: '(11) 99999-8888',
+    segmento: 'Alimentação',
+    necessidade: 'Quero um cardápio digital.',
     modelo: 'Forno 27 Pizzaria',
-    funcionalidades: ['Catálogo ou cardápio'],
-    mensagem: 'Quero um cardápio digital.',
   }
 
   it('aceita dados completos', () => {
@@ -224,8 +225,12 @@ describe('formulário de orçamento', () => {
 
   it('monta a mensagem com os dados preenchidos', () => {
     const texto = textoOrcamento(base)
-    expect(texto).toContain('Padaria Aurora')
-    expect(texto).toContain('Catálogo ou cardápio')
+    expect(texto).toContain('Forno 27 Pizzaria')
+    expect(texto).toContain('cardápio digital')
+  })
+
+  it('não exige mais empresa nem lista de funcionalidades', () => {
+    expect(validar({ nome: 'Ana', whatsapp: '(11) 99999-8888', segmento: 'Outro', necessidade: '' })).toEqual({})
   })
 })
 
@@ -239,5 +244,106 @@ describe('modelos do site', () => {
   it('encontra modelo por slug', () => {
     expect(modeloPorSlug('aurea')?.nome).toBe('Áurea Consultoria')
     expect(modeloPorSlug('nao-existe')).toBeUndefined()
+  })
+})
+
+describe('datas no fuso de São Paulo', () => {
+  it('formata hoje como YYYY-MM-DD', () => {
+    expect(hojeSaoPaulo()).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
+
+  it('usa o fuso de São Paulo, não o do aparelho', () => {
+    // 1h UTC de 1º de janeiro ainda é 31 de dezembro em São Paulo (UTC-3)
+    expect(hojeSaoPaulo(new Date('2027-01-01T01:00:00Z'))).toBe('2026-12-31')
+  })
+
+  it('soma dias atravessando mês e ano', () => {
+    expect(somarDias('2026-01-31', 1)).toBe('2026-02-01')
+    expect(somarDias('2026-12-31', 1)).toBe('2027-01-01')
+    expect(somarDias('2028-02-28', 1)).toBe('2028-02-29')
+  })
+
+  it('reconhece data no passado', () => {
+    const agora = new Date('2026-09-12T15:00:00Z')
+    expect(dataNoPassado('2026-09-11', agora)).toBe(true)
+    expect(dataNoPassado('2026-09-12', agora)).toBe(false)
+    expect(dataNoPassado('2026-10-01', agora)).toBe(false)
+  })
+
+  it('devolve mensagem de erro para data anterior a hoje', () => {
+    const agora = new Date('2026-09-12T15:00:00Z')
+    expect(erroDeData('2026-09-01', true, agora)).toMatch(/futura/)
+    expect(erroDeData('2026-09-20', true, agora)).toBe('')
+    expect(erroDeData('', true, agora)).toMatch(/Escolha/)
+    expect(erroDeData('', false, agora)).toBe('')
+  })
+})
+
+describe('metadados das rotas', () => {
+  it('toda rota tem título, descrição e caminho', () => {
+    for (const r of todasAsRotas) {
+      expect(r.caminho.startsWith('/')).toBe(true)
+      expect(r.titulo.length).toBeGreaterThan(10)
+      expect(r.descricao.length).toBeGreaterThan(20)
+    }
+  })
+
+  it('não existem caminhos repetidos', () => {
+    expect(new Set(todasAsRotas.map((r) => r.caminho)).size).toBe(todasAsRotas.length)
+  })
+
+  it('as demonstrações fictícias ficam fora do índice e do sitemap', () => {
+    expect(metasDemo.every((r) => r.noindex && r.semSitemap)).toBe(true)
+    expect(todasAsRotas.filter((r) => r.caminho.startsWith('/demonstracao')).every((r) => r.noindex)).toBe(true)
+  })
+
+  it('as páginas comerciais continuam indexáveis', () => {
+    expect(metaHome.noindex).toBeUndefined()
+    expect(metasModelo).toHaveLength(4)
+    expect(metasModelo.every((r) => !r.noindex)).toBe(true)
+  })
+
+  it('nenhuma demonstração usa dados estruturados de empresa real', () => {
+    const proibidos = ['Restaurant', 'Car', 'Article', 'ProfessionalService', 'LocalBusiness']
+    for (const r of metasDemo) {
+      const tipo = (r.dados as { '@type'?: string } | undefined)?.['@type']
+      expect(proibidos).not.toContain(tipo)
+    }
+  })
+
+  it('cada demonstração encontra os próprios metadados', () => {
+    expect(metaDemoPorCaminho('/demonstracao/forno-27')?.noindex).toBe(true)
+    expect(metaDemoPorCaminho('/demonstracao/linha-norte/comparar')).toBeDefined()
+    expect(metaDemoPorCaminho('/rota/que-nao-existe')).toBeUndefined()
+  })
+})
+
+describe('seletor de demonstrações', () => {
+  it('lista os quatro modelos com rota própria', () => {
+    expect(demos).toHaveLength(4)
+    expect(new Set(demos.map((d) => d.rota)).size).toBe(4)
+    expect(demos.every((d) => d.rota.startsWith('/demonstracao/'))).toBe(true)
+  })
+
+  it('cada demonstração do seletor tem metadados correspondentes', () => {
+    for (const d of demos) {
+      expect(metaDemoPorCaminho(d.rota)).toBeDefined()
+    }
+  })
+
+  it('encontra a demonstração pelo id e ignora id inválido', () => {
+    expect(demoPorId('aurea')?.curto).toBe('Escritório')
+    expect(demoPorId('nao-existe')).toBeUndefined()
+  })
+})
+
+describe('cards da galeria', () => {
+  it('todo modelo tem resumo curto e estudo de caso', () => {
+    for (const m of modelos) {
+      expect(m.resumoCurto.length).toBeGreaterThan(20)
+      expect(m.resumoCurto.length).toBeLessThan(90)
+      expect(m.problema.length).toBeGreaterThan(40)
+      expect(m.solucao.length).toBeGreaterThan(40)
+    }
   })
 })

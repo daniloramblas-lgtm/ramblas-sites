@@ -6,6 +6,11 @@ export type Modelo = {
   segmento: string
   categoria: Categoria
   resumo: string
+  /** Frase curta usada nos cards da galeria. */
+  resumoCurto: string
+  /** Estudo de caso conceitual: o problema do segmento e a resposta do modelo. */
+  problema: string
+  solucao: string
   capa: string
   alt: string
   funcionalidades: string[]
@@ -29,13 +34,16 @@ export const categorias: { id: Categoria | 'todos'; rotulo: string }[] = [
 export const modelos: Modelo[] = [
   {
     slug: 'forno-27',
+    problema: 'Pedidos chegam em mensagens soltas, com o cardápio reenviado em foto a cada conversa e o valor somado à mão — o que trava o atendimento justamente no horário de pico.',
+    solucao: 'Um cardápio que sempre mostra o preço atual, deixa o cliente montar o pedido sozinho e entrega tudo somado, com endereço e forma de entrega, numa única mensagem organizada.',
+    resumoCurto: 'Cardápio digital com carrinho que fecha o pedido no WhatsApp.',
     nome: 'Forno 27 Pizzaria',
     segmento: 'Pizzaria artesanal',
     categoria: 'alimentacao',
     resumo:
       'Cardápio digital com busca, escolha de tamanho, adicionais e carrinho que fecha o pedido direto na conversa do WhatsApp.',
     capa: '/img/capa-forno27.webp',
-    alt: 'Fotografia de pizza artesanal saindo do forno a lenha',
+    alt: 'Composição gráfica em vermelho escuro e dourado representando uma pizzaria artesanal',
     funcionalidades: ['Cardápio por categoria', 'Busca de produtos', 'Carrinho e entrega', 'Pedido por WhatsApp'],
     rotaDemo: '/demonstracao/forno-27',
     indicadoPara: [
@@ -71,14 +79,17 @@ export const modelos: Modelo[] = [
   },
   {
     slug: 'distrito-13',
+    problema: 'A agenda vive no caderno ou no WhatsApp do barbeiro: horários repetidos, esquecimento e tempo perdido combinando disponibilidade por mensagem.',
+    solucao: 'Um fluxo guiado em quatro etapas — serviço, profissional, dia e horário — que só oferece o que está livre e devolve a reserva pronta para confirmação.',
+    resumoCurto: 'Agenda por profissional, dia e horário, confirmada no WhatsApp.',
     nome: 'Distrito 13 Barbearia',
     segmento: 'Barbearia',
     categoria: 'beleza',
     resumo:
       'Agenda com escolha de profissional, data e horário, tabela de serviços, galeria de trabalhos e clube de assinatura.',
     capa: '/img/capa-distrito13.webp',
-    alt: 'Fotografia de atendimento em uma barbearia contemporânea',
-    funcionalidades: ['Agendamento em 3 passos', 'Escolha de profissional', 'Clube de assinatura', 'Confirmação por WhatsApp'],
+    alt: 'Composição gráfica em preto e cobre representando uma barbearia contemporânea',
+    funcionalidades: ['Agendamento guiado em 4 etapas', 'Escolha de profissional', 'Clube de assinatura', 'Confirmação por WhatsApp'],
     rotaDemo: '/demonstracao/distrito-13',
     indicadoPara: [
       'Barbearias, salões e estúdios de estética',
@@ -113,13 +124,16 @@ export const modelos: Modelo[] = [
   },
   {
     slug: 'aurea',
+    problema: 'Escritórios recebem contatos sem contexto e gastam a primeira reunião entendendo o assunto, além de dependerem de indicação por não terem presença institucional.',
+    solucao: 'Uma apresentação sóbria das áreas de atuação com um atendimento inicial que já chega triado: área, assunto descrito e data pretendida para a reunião.',
+    resumoCurto: 'Base institucional com áreas de atuação e atendimento inicial.',
     nome: 'Áurea Consultoria',
     segmento: 'Escritórios e serviços profissionais',
     categoria: 'escritorios',
     resumo:
       'Base institucional para advocacia, contabilidade, seguros, arquitetura ou consultoria, com áreas de atuação, equipe e atendimento inicial.',
     capa: '/img/capa-aurea.webp',
-    alt: 'Fotografia de reunião em um escritório de consultoria',
+    alt: 'Composição gráfica em verde profundo e dourado discreto representando um escritório de consultoria',
     funcionalidades: ['Áreas de atuação', 'Atendimento inicial', 'Agendamento de reunião', 'Conteúdos e FAQ'],
     rotaDemo: '/demonstracao/aurea',
     indicadoPara: [
@@ -155,13 +169,16 @@ export const modelos: Modelo[] = [
   },
   {
     slug: 'linha-norte',
+    problema: 'O estoque muda toda semana e o cliente pergunta preço, ano e quilometragem um a um, enquanto compara veículos em várias abas.',
+    solucao: 'Um catálogo com filtros, comparador lado a lado e simulação ilustrativa de parcelas, para o contato começar já sabendo qual carro interessa.',
+    resumoCurto: 'Catálogo de veículos com filtros, comparador e simulação.',
     nome: 'Linha Norte Motors',
     segmento: 'Concessionária e revenda',
     categoria: 'automoveis',
     resumo:
       'Catálogo de veículos com filtros, comparação, simulação ilustrativa de financiamento, avaliação de usado e test-drive.',
     capa: '/img/capa-linhanorte.webp',
-    alt: 'Fotografia de sedan azul em uma concessionária contemporânea',
+    alt: 'Composição gráfica em grafite e azul profundo representando uma concessionária de veículos',
     funcionalidades: ['Catálogo com filtros', 'Comparador de veículos', 'Simulação de financiamento', 'Test-drive e avaliação'],
     rotaDemo: '/demonstracao/linha-norte',
     indicadoPara: [

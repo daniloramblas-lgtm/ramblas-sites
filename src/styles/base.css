@@ -1004,6 +1004,75 @@ section {
   font-size: 0.85rem;
   color: rgba(248, 244, 236, 0.55);
 }
+.rodape__link-botao {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: rgba(248, 244, 236, 0.78);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.rodape__link-botao:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------- consentimento */
+.consentimento-analytics {
+  position: fixed;
+  z-index: 300;
+  left: 50%;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(calc(100% - 2rem), 760px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(248, 244, 236, 0.16);
+  border-radius: var(--r-lg);
+  background: rgba(19, 18, 16, 0.96);
+  color: var(--marfim);
+  box-shadow: 0 22px 60px -20px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(14px);
+}
+.consentimento-analytics strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.consentimento-analytics p {
+  margin: 0;
+  color: rgba(248, 244, 236, 0.74);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.consentimento-analytics a {
+  color: #fff;
+}
+.consentimento-analytics__acoes {
+  display: flex;
+  gap: 0.55rem;
+}
+.consentimento-analytics .btn {
+  min-height: 44px;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  padding: 0.75rem 1rem;
+}
+.consentimento-analytics .btn--contorno {
+  border-color: rgba(248, 244, 236, 0.55);
+  color: var(--marfim);
+}
+.consentimento-analytics .btn--contorno:hover {
+  background: var(--marfim);
+  color: var(--preto);
+}
 
 /* ---------------------------------------------------------------- flutuante */
 .whats-flutuante {
@@ -1659,6 +1728,23 @@ section {
     right: 1rem;
     bottom: max(1rem, env(safe-area-inset-bottom));
     padding: 0.85rem;
+  }
+
+  .consentimento-analytics {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    width: calc(100% - 1rem);
+    bottom: max(0.5rem, env(safe-area-inset-bottom));
+    padding: 1rem;
+    border-radius: 18px;
+  }
+  .consentimento-analytics__acoes {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+  .consentimento-analytics .btn {
+    min-width: 0;
+    padding-inline: 0.6rem;
   }
 
   .modelo-topo {

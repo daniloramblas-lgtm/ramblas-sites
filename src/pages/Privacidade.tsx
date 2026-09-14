@@ -1,6 +1,7 @@
 import { contato } from '../config/site.config'
 import { useSeo } from '../lib/seo'
 import { metaPrivacidade } from '../data/rotas'
+import { abrirPreferenciasAnalytics, analyticsConfigurado } from '../lib/analytics'
 
 export default function Privacidade() {
   useSeo(metaPrivacidade)
@@ -40,9 +41,17 @@ export default function Privacidade() {
 
         <h2>Cookies</h2>
         <p>
-          O site não usa cookies de publicidade. Ferramentas de medição, quando ativadas em um projeto,
-          são informadas ao visitante e podem ser recusadas.
+          O site não usa cookies de publicidade. Com sua autorização, o Google Analytics registra dados
+          técnicos de navegação, como páginas visitadas, tipo de dispositivo, origem da visita, rolagens e
+          cliques de saída. O endereço IP é anonimizado, sinais de publicidade ficam desativados e os campos
+          dos formulários não são enviados à ferramenta. Você pode recusar ou mudar sua escolha a qualquer
+          momento.
         </p>
+        {analyticsConfigurado() && (
+          <button className="btn btn--contorno" type="button" onClick={abrirPreferenciasAnalytics}>
+            Alterar preferência de métricas
+          </button>
+        )}
 
         <h2>Seus direitos</h2>
         <p>

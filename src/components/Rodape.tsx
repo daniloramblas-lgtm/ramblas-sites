@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { contato, servicos } from '../config/site.config'
 import { modelos } from '../data/modelos'
 import { linkWhatsApp } from '../lib/whatsapp'
+import { abrirPreferenciasAnalytics, analyticsConfigurado } from '../lib/analytics'
 
 export default function Rodape() {
   return (
@@ -67,6 +68,13 @@ export default function Rodape() {
               <li>
                 <Link to="/privacidade">Política de privacidade</Link>
               </li>
+              {analyticsConfigurado() && (
+                <li>
+                  <button className="rodape__link-botao" type="button" onClick={abrirPreferenciasAnalytics}>
+                    Preferências de métricas
+                  </button>
+                </li>
+              )}
               <li>{contato.cidade}</li>
             </ul>
           </div>

@@ -90,7 +90,7 @@ O Netlify republica sozinho (`npm run build` → `dist`). Depois de comprar um d
 
 ## 5. Analytics (opcional)
 
-Sem a variável `VITE_GA_ID`, nenhum script é carregado e nenhum cookie é criado. Para ativar, defina a variável no Netlify ou em `.env` (veja `.env.example`). Eventos enviados: `view_model`, `open_demo`, `switch_demo`, `whatsapp_click`, `quote_submit`, `pizza_add_to_cart`, `booking_complete`, `vehicle_compare`, `test_drive_submit` — todos sem nome, telefone, endereço ou mensagem.
+Sem a variável `VITE_GA_ID`, nenhum script é carregado e nenhum cookie é criado. Com a variável configurada, o Analytics só inicia depois que o visitante aceita a medição no aviso de privacidade; a escolha pode ser alterada pelo rodapé ou pela página `/privacidade`. Para ativar, defina a variável no Netlify ou em `.env` (veja `.env.example`). Eventos enviados: `view_model`, `open_demo`, `switch_demo`, `whatsapp_click`, `quote_submit`, `pizza_add_to_cart`, `booking_complete`, `vehicle_compare`, `test_drive_submit` — todos sem nome, telefone, endereço ou mensagem.
 
 ---
 

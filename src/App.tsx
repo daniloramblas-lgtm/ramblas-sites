@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { Outlet, Route, Routes } from 'react-router-dom'
 import Cabecalho from './components/Cabecalho'
 import Rodape from './components/Rodape'
+import ConsentimentoAnalytics from './components/ConsentimentoAnalytics'
 import { BotaoWhatsApp, RolarAoNavegar } from './components/Comuns'
 import Inicio from './pages/Inicio'
 import Modelos from './pages/Modelos'
@@ -68,6 +69,7 @@ export default function App() {
           <Route path="/demonstracao/linha-norte/comparar" element={<Comparador />} />
         </Routes>
       </Suspense>
+      <ConsentimentoAnalytics />
     </>
   )
 }

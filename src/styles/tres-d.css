@@ -457,23 +457,23 @@ body {
   bottom: 2%;
   transform: translateZ(200px);
 }
-@media (max-width: 560px) {
+@media (max-width: 759px) {
   .cartao-flutuante--catalogo,
   .tablet {
     display: none;
   }
   .cena3d {
-    aspect-ratio: 1 / 0.76;
+    aspect-ratio: 1 / 0.64;
   }
   .notebook {
-    left: 1%;
-    top: 7%;
-    width: 84%;
+    left: 0;
+    top: 1%;
+    width: 90%;
   }
   .celular {
-    right: 1%;
-    bottom: 1%;
-    width: 24%;
+    right: 0;
+    bottom: 0;
+    width: 22%;
   }
   .cartao-flutuante {
     display: none;

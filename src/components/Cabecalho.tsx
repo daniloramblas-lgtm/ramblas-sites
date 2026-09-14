@@ -40,7 +40,7 @@ export default function Cabecalho() {
 
         <div className="cabecalho__acoes">
           <a className="btn btn--primario btn--pequeno" href={linkWhatsApp()} target="_blank" rel="noopener">
-            Solicitar orçamento
+            Falar sobre um projeto
           </a>
           <button
             type="button"
@@ -70,7 +70,7 @@ export default function Cabecalho() {
               </ul>
             </nav>
             <a className="btn btn--primario" href={linkWhatsApp()} target="_blank" rel="noopener">
-              Solicitar orçamento
+              Falar sobre um projeto
             </a>
           </div>
         </div>

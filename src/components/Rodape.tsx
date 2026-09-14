@@ -57,6 +57,13 @@ export default function Rodape() {
                   </a>
                 </li>
               )}
+              {contato.instagram && (
+                <li>
+                  <a href={contato.instagram} target="_blank" rel="noopener">
+                    Instagram
+                  </a>
+                </li>
+              )}
               <li>
                 <Link to="/privacidade">Política de privacidade</Link>
               </li>

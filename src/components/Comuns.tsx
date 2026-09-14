@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { linkWhatsApp } from '../lib/whatsapp'
 import { evento } from '../lib/analytics'
@@ -13,9 +13,32 @@ export function BotaoWhatsApp({
   rotulo?: string
   origem?: string
 }) {
+  const { pathname } = useLocation()
+  const [oculto, setOculto] = useState(false)
+
+  useEffect(() => {
+    const alvos = Array.from(document.querySelectorAll('.hero, .conversao, .rodape'))
+    if (alvos.length === 0 || typeof IntersectionObserver === 'undefined') {
+      setOculto(false)
+      return
+    }
+
+    const visiveis = new Set<Element>()
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.isIntersecting) visiveis.add(entrada.target)
+        else visiveis.delete(entrada.target)
+      })
+      setOculto(visiveis.size > 0)
+    })
+    alvos.forEach((alvo) => observador.observe(alvo))
+    return () => observador.disconnect()
+  }, [pathname])
+
   return (
     <a
       className="whats-flutuante"
+      data-oculto={oculto}
       href={linkWhatsApp(mensagem)}
       target="_blank"
       rel="noopener noreferrer"

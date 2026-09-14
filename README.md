@@ -36,7 +36,6 @@ npm run imagens:ilustracoes # recria as ilustrações e depois as variantes
 | Serviços (os 6 com `destaque: true` aparecem primeiro na home) | `servicos` |
 | Etapas do "Como funciona" | `etapas` |
 | **Sua apresentação e sua foto** | `quemFaz` |
-| Preços | `planos.apartirDe` (vazio = "Sob consulta") e `planosIntro` |
 | FAQ da home (5 perguntas) | `faq` |
 | Aviso curto de privacidade no formulário | `avisoPrivacidadeCurto` |
 
@@ -107,7 +106,21 @@ Sem a variável `VITE_GA_ID`, nenhum script é carregado e nenhum cookie é cria
 
 ## 7. Pendências que dependem de você
 
-1. Adicionar sua foto em `public/img/` e apontar em `quemFaz.foto` (sem foto, aparece um monograma).
-2. Decidir sobre os preços: hoje os três planos mostram "Sob consulta", com a introdução coerente com isso.
-3. Desativar o selo do Netlify e, quando houver domínio, atualizar os endereços.
+### Para começar a divulgar
+
+1. Abrir o site no seu próprio celular e confirmar os três destinos já preenchidos: WhatsApp `(11) 98266-3117`, e-mail `daniloramblas@gmail.com` e LinkedIn `linkedin.com/in/daniloramblas`.
+2. Decidir se o monograma `DR` continua na apresentação ou se será substituído por uma foto sua em `public/img/`, apontada em `quemFaz.foto`.
+3. Se quiser divulgar Instagram, preencher `contato.instagram`; enquanto estiver vazio, a rede não aparece.
+
+### Pode entrar depois do lançamento
+
+1. Comprar um domínio próprio, conectá-lo no Netlify e trocar `contato.site`, `robots.txt` e os endereços do `index.html`.
+2. Criar uma medição no Google Analytics e preencher `VITE_GA_ID` no Netlify, caso queira acompanhar visitas e cliques.
+3. Desativar o selo do Netlify nas configurações da conta, se o plano permitir.
 4. Rodar Lighthouse novamente depois de cada alteração relevante no site publicado.
+
+### Processo comercial fora do site
+
+Antes de aceitar os primeiros projetos, deixe definidos o modelo de proposta/contrato, etapas de aprovação, forma de pagamento, política de manutenção e como serão tratados domínio, hospedagem e conteúdo do cliente.
+
+A vitrine pública não apresenta preços ou planos. Os valores são tratados somente na conversa comercial, depois de entender o projeto.

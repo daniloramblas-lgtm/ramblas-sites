@@ -26,7 +26,7 @@ export function CabecalhoAurea() {
           ]}
         />
         <Link className="au-btn au-btn--verde au-btn--pequeno" to="/demonstracao/aurea#atendimento">
-          Falar com o escritório
+          Contato
         </Link>
       </div>
     </header>

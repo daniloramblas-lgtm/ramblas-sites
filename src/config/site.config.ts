@@ -2,7 +2,7 @@
  * ARQUIVO CENTRAL DE CONFIGURAÇÃO
  * ------------------------------------------------------------------
  * Praticamente tudo que muda de um cliente para outro está aqui:
- * contato, WhatsApp, preços dos planos, serviços, FAQ, apresentação
+ * contato, WhatsApp, serviços, FAQ, apresentação
  * pessoal e textos institucionais. Edite este arquivo e o site muda.
  */
 
@@ -31,7 +31,6 @@ export const navegacao = [
   { rotulo: 'Serviços', href: '/#servicos' },
   { rotulo: 'Como funciona', href: '/#como-funciona' },
   { rotulo: 'Quem faz', href: '/#quem-faz' },
-  { rotulo: 'Planos', href: '/#planos' },
   { rotulo: 'Contato', href: '/#contato' },
 ]
 
@@ -39,8 +38,8 @@ export const hero = {
   titulo: 'Seu negócio merece um site que também trabalhe por você.',
   texto:
     'Criamos sites profissionais, catálogos, agendamentos e sistemas sob medida para transformar visitas em atendimentos e vendas.',
-  botaoPrimario: 'Conhecer os modelos',
-  botaoSecundario: 'Falar pelo WhatsApp',
+  botaoPrimario: 'Ver modelos',
+  botaoSecundario: 'WhatsApp',
   /** Benefícios resumidos dentro do hero, no lugar de uma seção inteira. */
   pontos: ['Visual profissional', 'Perfeito no celular', 'Integrado ao WhatsApp', 'Sistemas sob medida'],
 }
@@ -102,64 +101,20 @@ export const quemFaz = {
    */
   foto: '',
   apresentacao: [
-    'Estudante de Direito na Universidade São Judas Tadeu, com conclusão prevista para 2029, e estagiário jurídico em São Paulo. Atuo com Direito Médico, Cível e Criminal e cuido da administração do sistema de gestão documental do escritório.',
-    'Foi nessa rotina que comecei a programar: criei ferramentas próprias para gerar procurações automaticamente, organizar bancos de dados de clientes e montar documentos em lote, integrando planilhas e automações ao dia a dia da equipe.',
+    'Desenvolvo pessoalmente os sites e sistemas apresentados aqui, da primeira conversa até a publicação.',
+    'Comecei programando automações para documentos, bancos de dados e planilhas na rotina jurídica. Hoje aplico essa experiência para criar soluções digitais úteis, fáceis de usar e bem apresentadas.',
   ],
   pontos: [
-    'Experiência em escritórios de Direito Público, Previdenciário, Médico, Cível e Criminal',
-    'Automação de documentos, bancos de dados e integrações com planilhas',
-    'Administração de sistema de gestão documental em escritório',
-    'Projetos autorais de automação jurídica (Ramblas Legal)',
+    'Sites institucionais e landing pages responsivas',
+    'Catálogos, cardápios, pedidos e agendamentos',
+    'Painéis, bancos de dados e integrações',
+    'Automações de documentos e processos',
   ],
   comoConduz:
     'O projeto é conduzido diretamente comigo, do primeiro contato à publicação: sem intermediário, com prazos combinados por escrito e um link de pré-visualização acompanhando cada etapa.',
   aviso:
     'A Ramblas Sites está começando. Os quatro modelos deste site são estudos de caso conceituais, criados por mim para mostrar o que consigo construir — não são clientes, e não apresento números ou depoimentos que ainda não existem.',
 }
-
-/**
- * PREÇOS
- * Deixe `apartirDe` vazio ('') para exibir "Sob consulta".
- * Se publicar valores, ajuste também `planosIntro`.
- */
-export const planos = [
-  {
-    nome: 'Essencial',
-    apartirDe: '',
-    resumo: 'Uma página completa para quem precisa estar no ar rápido e bem apresentado.',
-    itens: ['Landing page', 'Design responsivo', 'Botão de WhatsApp', 'Formulário de contato', 'SEO básico'],
-    destaque: false,
-  },
-  {
-    nome: 'Profissional',
-    apartirDe: '',
-    resumo: 'Site completo com a funcionalidade principal do seu negócio já incluída.',
-    itens: [
-      'Site com até cinco páginas',
-      'Catálogo, cardápio ou agendamento',
-      'Analytics configurado',
-      'Personalização completa de identidade',
-      'Integração com WhatsApp',
-    ],
-    destaque: true,
-  },
-  {
-    nome: 'Sob Medida',
-    apartirDe: '',
-    resumo: 'Para quem precisa de sistema próprio, banco de dados e processos automatizados.',
-    itens: [
-      'Painel administrativo',
-      'Banco de dados',
-      'Integrações com outros sistemas',
-      'Automação de processos',
-      'Escopo definido em conjunto',
-    ],
-    destaque: false,
-  },
-]
-
-export const planosIntro =
-  'Todos os projetos são orçados após uma conversa rápida sobre páginas, funcionalidades e conteúdo.'
 
 /** FAQ compacto na home; os detalhes ficam nas páginas dos modelos. */
 export const faq = [
@@ -173,7 +128,7 @@ export const faq = [
   },
   {
     p: 'Consigo editar textos, preços e produtos depois?',
-    r: 'Com painel administrativo (plano Sob Medida), você mesmo edita. Sem painel, os conteúdos ficam em um arquivo de configuração que atualizo a pedido, dentro da manutenção.',
+    r: 'Quando o projeto inclui painel administrativo, você mesmo edita. Sem painel, os conteúdos ficam em um arquivo de configuração que atualizo a pedido, dentro da manutenção.',
   },
   {
     p: 'O agendamento e o carrinho funcionam de verdade?',

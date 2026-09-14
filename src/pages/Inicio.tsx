@@ -6,8 +6,6 @@ import {
   etapas,
   faq,
   hero,
-  planos,
-  planosIntro,
   quemFaz,
   servicos,
 } from '../config/site.config'
@@ -83,6 +81,9 @@ export default function Inicio() {
             <h2>Serviços</h2>
             <p>Você contrata só o que faz sentido para o momento do negócio.</p>
           </div>
+          <p className="dica-arraste" aria-hidden="true">
+            Deslize para ver o que eu desenvolvo <span>→</span>
+          </p>
           <div className="grade-servicos-compacta" id="lista-servicos" data-reveal>
             {principais.map((s) => (
               <article className="servico-card" key={s.nome}>
@@ -164,62 +165,15 @@ export default function Inicio() {
                 rel="noopener noreferrer"
                 onClick={() => evento('whatsapp_click', { origem: 'quem-faz' })}
               >
-                Conversar pelo WhatsApp
+                Conversar
               </a>
               <a className="btn btn--contorno btn--pequeno" href={contato.linkedin} target="_blank" rel="noopener noreferrer">
                 LinkedIn
               </a>
               <a className="btn btn--contorno btn--pequeno" href={contato.portfolio} target="_blank" rel="noopener noreferrer">
-                Portfólio pessoal
+                Ver portfólio
               </a>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- planos */}
-      <section id="planos">
-        <div className="container">
-          <div className="secao-cabecalho" data-reveal>
-            <h2>Planos</h2>
-            <p>{planosIntro}</p>
-          </div>
-          <div className="grade-planos">
-            {planos.map((p) => (
-              <article className={`plano tem-relevo ${p.destaque ? 'plano--destaque' : ''}`} key={p.nome} data-reveal>
-                <h3>{p.nome}</h3>
-                <div className="plano__preco">
-                  {p.apartirDe ? (
-                    <>
-                      R$ {p.apartirDe}
-                      <small>a partir de</small>
-                    </>
-                  ) : (
-                    <>
-                      Sob consulta
-                      <small>orçamento após uma conversa rápida</small>
-                    </>
-                  )}
-                </div>
-                <p className="plano__resumo">{p.resumo}</p>
-                <ul>
-                  {p.itens.map((i) => (
-                    <li key={i}>
-                      <span>{i}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  className={`btn ${p.destaque ? 'btn--claro' : 'btn--contorno'}`}
-                  href={linkWhatsApp(`Olá! Tenho interesse no plano ${p.nome} da Ramblas Sites.`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => evento('whatsapp_click', { origem: `plano-${p.nome}` })}
-                >
-                  Falar sobre o plano {p.nome}
-                </a>
-              </article>
-            ))}
           </div>
         </div>
       </section>

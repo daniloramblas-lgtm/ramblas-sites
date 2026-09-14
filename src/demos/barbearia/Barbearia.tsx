@@ -96,7 +96,7 @@ export default function Barbearia() {
           </a>
           <MenuSecoes secoes={SECOES} rotulo="Navegação da barbearia" />
           <a className="bb-btn bb-btn--cobre bb-btn--pequeno" href="#agendar">
-            Agendar horário
+            Agendar
           </a>
         </div>
       </header>

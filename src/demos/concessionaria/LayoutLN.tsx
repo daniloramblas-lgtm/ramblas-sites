@@ -28,7 +28,7 @@ export function CabecalhoLN() {
           rel="noopener noreferrer"
           onClick={() => evento('whatsapp_click', { origem: 'linha-norte-cabecalho' })}
         >
-          Falar pelo WhatsApp
+          WhatsApp
         </a>
       </div>
     </header>
